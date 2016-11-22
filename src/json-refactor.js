@@ -116,7 +116,7 @@
 
     }
 
-//格式化json
+    //格式化json
     function format(target, map) {
         //是数组
         map instanceof Array ? (
@@ -169,5 +169,4 @@
         window.JSON.refactor = jsonRefactor;
     }
     return jsonRefactor;
-}))
-;
+}));

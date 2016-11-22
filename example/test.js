@@ -35,13 +35,14 @@ var a = [
             d: "32.00"
         }
     ],
-    b = [{
-        aa: "a!bool",
-        b: {
-            aaaa: "a!string",
-            bbbb: "b!bool"
-        },
-        cc: "c!int",
-        dd: "d!float"
-    }];
+    //b = [{
+//    aa: "a!bool",
+//    b: {
+//        aaaa: "a!string",
+//        bbbb: "b!bool"
+//    },
+//    cc: "c!int",
+//    dd: "d!float"
+//}];
+b = [];
 console.log(JSON.refactor(a, b));
