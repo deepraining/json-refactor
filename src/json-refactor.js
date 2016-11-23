@@ -1,4 +1,5 @@
 /**
+ * json-refactor
  * Created by senntyou on 2016/11/22.
  */
 (function (global, factory) {
@@ -100,18 +101,18 @@
      * 转换值
      * @param target 目标对象
      * @param map map
-     * @param item map中的item
+     * @param mapKey map中的key
      */
-    function convertValue(target, map, item) {
+    function convertValue(target, map, mapKey) {
         //字符串
-        var mapValue = map[item],//map值
+        var mapValue = map[mapKey],//map值
             mapValueArray = mapValue.split('!'),
             originalKey = mapValueArray[0],//原始键
-            //map value: "key!format", 感叹号前面是键值，感叹号后面是转换值
+        //map value: "key!format", 感叹号前面是键值，感叹号后面是转换值
             format = mapValueArray[1],//格式
             targetValue = target[originalKey];//目标值
 
-        target[item] = !format ? targetValue : convertDataType(targetValue, format);
+        target[mapKey] = !format ? targetValue : convertDataType(targetValue, format);
         delete target[originalKey];
 
     }
@@ -119,33 +120,37 @@
     //格式化json
     function format(target, map) {
         //是数组
-        map instanceof Array ? (
+        Array.isArray(map) ? (
             target.map(function (item) {
                 //如果是对象或数组
-                if (typeof item == 'object' && !!map[0]) format(item, map[0]);
-                else return !1
+                if (!!map[0] && typeof item == 'object') format(item, map[0]);
             })
         ) : (
             //是对象
-            Object.keys(map).map(function (item) {
-                var mapValue = map[item],//map值
-                    targetValue = target[item];//目标值
+            Object.keys(map).map(function (mapKey) {
+                var mapValue,//map值
+                    targetValue;//目标值
+
+                mapValue = map[mapKey];
+                //如果是以下划线开头，并且在原数据中不存在这个键，则就是某个字段的二次改变
+                if (mapKey.startsWith('_') && target[mapKey] == undefined) {
+                    targetValue = target[mapKey.slice(1)];
+                } else {
+                    targetValue = target[mapKey];
+                }
                 //是对象或数组并且原数据中存在这个字段
                 if (typeof mapValue == 'object' && !!targetValue) {
-                    mapValue instanceof Array ? (//array
+                    Array.isArray(mapValue) ? (//array
                         targetValue.map(function (item) {
                             //如果是对象或数组
-                            if (typeof item == 'object' && !!map[0]) format(item, map[0]);
-                            else return !1
+                            if (!!mapValue[0] && typeof item == 'object') format(item, mapValue[0]);
                         })
                     ) : (//object
                         format(targetValue, mapValue)
                     );
-                    return;
-                }
-
+                } else
                 //字符串
-                convertValue(target, map, item);
+                convertValue(target, map, mapKey);
             })
         );
     }
