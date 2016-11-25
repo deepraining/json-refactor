@@ -3,7 +3,13 @@
  */
 var a = [
         {
-            a: 1,
+            a: {
+                aa: {
+                    aaa: {
+                        aaaa: "123"
+                    }
+                }
+            },
             b: {
                 a: 1, b: 2, c: [
                     {
@@ -24,7 +30,13 @@ var a = [
             d: "32.00"
         },
         {
-            a: 1,
+            a: {
+                aa: {
+                    aaa: {
+                        aaaa: "123"
+                    }
+                }
+            },
             b: {
                 a: 1, b: 2, c: [
                     {
@@ -46,7 +58,7 @@ var a = [
         }
     ],
     b = [{
-        aa: "a!bool",
+        aa: "a",
         bb: "b",
         cc: "c!int",
         dd: "d!float",
@@ -60,6 +72,7 @@ var a = [
                 jjjj: "j!string",
                 kkkkk: "k!bool"
             }]
-        }
+        },
+        ff: "aa.aa.aaa.aaaa!int"
     }];
 console.log(JSON.refactor(a, b));

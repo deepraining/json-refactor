@@ -98,6 +98,41 @@
     }
 
     /**
+     * 转换点语法的数据
+     * @param target
+     * @param mapKey
+     * @param originKeyArrayByDot
+     * @param format
+     */
+    function convertDataOfDotKey(target, mapKey, originKeyArrayByDot, format) {
+        var length = originKeyArrayByDot.length,
+            value;
+        if (length == 2) {
+            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]];
+        } else if (length == 3) {
+            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
+                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]];
+        }else if (length == 4) {
+            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
+                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]] != undefined &&
+                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]][originKeyArrayByDot[3]];
+        }
+         else {
+            console.error("点语法的解析最大只支持四级");
+            return;
+        }
+
+        typeof value != 'object' ? (
+            target[mapKey] = !format ? value : convertDataType(value, format)
+        ) : (
+            Array.isArray(value) ? (
+                target[mapKey] = cloneArray(value)
+            ) : (
+                target[mapKey] = cloneObject(value)
+            )
+        );
+    }
+    /**
      * 转换值
      * @param target 目标对象
      * @param map map
@@ -112,8 +147,16 @@
             format = mapValueArray[1],//格式
             targetValue = target[originalKey];//目标值
 
-        target[mapKey] = !format ? targetValue : convertDataType(targetValue, format);
-        delete target[originalKey];
+        var hasDot = !!~originalKey.indexOf('.'),//里面是否有点号
+            originKeyArrayByDot = hasDot && originalKey.split('.');//用点号分隔originKey(目前最多只\支持四级)
+
+        hasDot && originKeyArrayByDot.length > 1? (
+            convertDataOfDotKey(target, mapKey, originKeyArrayByDot, format)
+        ) : (
+            target[mapKey] = !format ? targetValue : convertDataType(targetValue, format),
+                delete target[originalKey]
+        );
+
 
     }
 
@@ -150,7 +193,7 @@
                     );
                 } else
                 //字符串
-                convertValue(target, map, mapKey);
+                    convertValue(target, map, mapKey);
             })
         );
     }

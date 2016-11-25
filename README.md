@@ -17,7 +17,13 @@ JSON.refactor(source, map, returnNewJson)
 ```
 [
 	{
-		a: 1,
+		a: {
+			aa: {
+				aaa: {
+					aaaa: "123"
+				}
+			}
+		},
 		b: {
 			a: 1, b: 2, c: [
 				{
@@ -38,7 +44,13 @@ JSON.refactor(source, map, returnNewJson)
 		d: "32.00"
 	},
 	{
-		a: 1,
+		a: {
+			aa: {
+				aaa: {
+					aaaa: "123"
+				}
+			}
+		},
 		b: {
 			a: 1, b: 2, c: [
 				{
@@ -63,25 +75,27 @@ JSON.refactor(source, map, returnNewJson)
 ### 示例map
 ```
 [{
-        aa: "a!bool",
-        bb: "b",
-        cc: "c!int",
-        dd: "d!float",
-        //对更改之后的bb属性进行操作
-        _bb: {
-            aaaa: "a!string",
-            bbbb: "b!bool",
-            c:[{
-                hhhh: "h",
-                iiii: "i!int",
-                jjjj: "j!string",
-                kkkkk: "k!bool"
-            }]
-        }
-    }]
+	aa: "a",
+	bb: "b",
+	cc: "c!int",
+	dd: "d!float",
+	//对更改之后的bb属性进行操作
+	_bb: {
+		aaaa: "a!string",
+		bbbb: "b!bool",
+		c:[{
+			hhhh: "h",
+			iiii: "i!int",
+			jjjj: "j!string",
+			kkkkk: "k!bool"
+		}]
+	},
+	ff: "aa.aa.aaa.aaaa!int"
+}]
 ```
 ###  说明
 
 * source结构和map结构要完全一样
 * map 键为新的键名，值为原来的键名，此外还可以做数据转换，在原来的键名后面加上叹号和操作符，"key!handle"，handle的可操作值为（int, float, string, bool）
 * 如果在更换键名的数据上再操作，可以使用 "_" 加新键名
+* 支持点语法，目前只支持四级
