@@ -68,6 +68,11 @@ var a = [
                 i: {
                     i: 100
                 }
+            },
+            j: {
+                j: {
+                    j: 12
+                }
             }
         },
         {
@@ -129,14 +134,19 @@ var a = [
                 i: {
                     i: 200
                 }
+            },
+            j: {
+                j: {
+                    j: 0
+                }
             }
         }
     ],
     b = [{
-        aa: "a",
-        bb: "b",
-        cc: "c!int",
-        dd: "d!float",
+        aa: "a^",
+        bb: "b^",
+        cc: "c!int^",
+        dd: "d!float^",
         //对更改之后的bb属性进行操作
         _bb: {
             aaaa: "a!string",
@@ -154,6 +164,11 @@ var a = [
         gg1: "g.g.g[]|a|sum||round",
         gg2: "g.g.g[]|b|concat| |toUpperCase",
         hh: "h!returnIfSuccess",
-        ii: "i.i.i!double"
+        ii: "i.i.i!double",
+        j: {
+            j: {
+                j: "j!bool"
+            }
+        }
     }];
 console.log(JSON.refactor(a, b));

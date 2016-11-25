@@ -165,11 +165,13 @@
      * @param mapKey
      * @param originalKey
      * @param format
+     * @param keepOriginKey
      */
-    function convertDataOfCommon(target, mapKey, originalKey, format) {
+    function convertDataOfCommon(target, mapKey, originalKey, format, keepOriginKey) {
         var targetValue = target[originalKey];//目标值
         target[mapKey] = !format ? targetValue : convertDataType(targetValue, format);
-        delete target[originalKey];
+        //如果原来的键与现在的键相同，则只是数据转换，不更换键名，不删除
+        mapKey != originalKey && !keepOriginKey && delete target[originalKey];
     }
 
     /**
@@ -295,7 +297,9 @@
      */
     function convertValue(target, map, mapKey) {
         //字符串
-        var mapValue = map[mapKey],//map值
+        var originMapValue = map[mapKey],//map值
+            keepOriginKey = !!~originMapValue.indexOf('^'),//是否保留原来的键名
+            mapValue = keepOriginKey ? originMapValue.slice(0, -1) : originMapValue,//map值
             mapValueArray = mapValue.split('!'),//map value: "key!format", 感叹号前面是键值，感叹号后面是转换值
             originalKey = mapValueArray[0],//原始键
             format = mapValueArray[1];//格式
@@ -317,7 +321,7 @@
                 convertDataOfArrayMark(target, mapKey, originalKey)
             ) : (
                 //普通操作
-                convertDataOfCommon(target, mapKey, originalKey, format)
+                convertDataOfCommon(target, mapKey, originalKey, format, keepOriginKey)
             )
         );
 

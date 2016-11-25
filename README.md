@@ -75,6 +75,11 @@ JSON.refactor(source, map, returnNewJson)
 			i: {
 				i: 100
 			}
+		},
+		j: {
+			j: {
+				j: 12
+			}
 		}
 	},
 	{
@@ -136,6 +141,11 @@ JSON.refactor(source, map, returnNewJson)
 			i: {
 				i: 200
 			}
+		},
+		j: {
+			j: {
+				j: 0
+			}
 		}
 	}
 ]
@@ -143,10 +153,10 @@ JSON.refactor(source, map, returnNewJson)
 ### 示例map
 ```
 [{
-	aa: "a",
-	bb: "b",
-	cc: "c!int",
-	dd: "d!float",
+	aa: "a^",
+	bb: "b^",
+	cc: "c!int^",
+	dd: "d!float^",
 	//对更改之后的bb属性进行操作
 	_bb: {
 		aaaa: "a!string",
@@ -164,13 +174,19 @@ JSON.refactor(source, map, returnNewJson)
 	gg1: "g.g.g[]|a|sum||round",
 	gg2: "g.g.g[]|b|concat| |toUpperCase",
 	hh: "h!returnIfSuccess",
-	ii: "i.i.i!double"
+	ii: "i.i.i!double",
+	j: {
+		j: {
+			j: "j!bool"
+		}
+	}
 }]
 ```
 ###  说明
 
 * source结构和map结构要完全一样
 * map 键为新的键名，值为原来的键名
+* 同级替换默认会删除原来的数据，如果要保留，后面添加符号 "^" 即可保留
 * "_" 操作符，如果在更换键名的数据上再操作，可以使用 "_" 加新键名
 * "!" 数据转换与函数操作符
   1. "key!handle"，在原来的键名后面加上叹号和操作符
