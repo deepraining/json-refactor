@@ -1,6 +1,13 @@
 /**
  * Created by senntyou on 2016/11/22.
  */
+function returnIfSuccess(number) {
+    return number == 1;
+}
+function double(number) {
+    return number * 2;
+}
+
 var a = [
         {
             a: {
@@ -27,7 +34,41 @@ var a = [
                 ]
             },
             c: 3.4,
-            d: "32.00"
+            d: "32.00",
+            e: [
+                {
+                    a: 7.1,
+                    b: "haha",
+                    c: 3
+                },
+                {
+                    a: 8.9,
+                    b: "hehe",
+                    c: 3
+                }
+            ],
+            g: {
+                g: {
+                    g: [
+                        {
+                            a: 7.1,
+                            b: "haha",
+                            c: 3
+                        },
+                        {
+                            a: 8.9,
+                            b: "hehe",
+                            c: 3
+                        }
+                    ]
+                }
+            },
+            h: 1,
+            i: {
+                i: {
+                    i: 100
+                }
+            }
         },
         {
             a: {
@@ -54,7 +95,41 @@ var a = [
                 ]
             },
             c: 3.4,
-            d: "32.00"
+            d: "32.00",
+            e: [
+                {
+                    a: 7.1,
+                    b: "haha",
+                    c: 3
+                },
+                {
+                    a: 8.9,
+                    b: "hehe",
+                    c: 3
+                }
+            ],
+            g: {
+                g: {
+                    g: [
+                        {
+                            a: 7.1,
+                            b: "haha",
+                            c: 3
+                        },
+                        {
+                            a: 8.9,
+                            b: "hehe",
+                            c: 3
+                        }
+                    ]
+                }
+            },
+            h: -1,
+            i: {
+                i: {
+                    i: 200
+                }
+            }
         }
     ],
     b = [{
@@ -73,6 +148,12 @@ var a = [
                 kkkkk: "k!bool"
             }]
         },
-        ff: "aa.aa.aaa.aaaa!int"
+        ff: "aa.aa.aaa.aaaa!int",
+        ee1: "e[]|a|sum||round",
+        ee2: "e[]|b|concat| |toUpperCase",
+        gg1: "g.g.g[]|a|sum||round",
+        gg2: "g.g.g[]|b|concat| |toUpperCase",
+        hh: "h!returnIfSuccess",
+        ii: "i.i.i!double"
     }];
 console.log(JSON.refactor(a, b));

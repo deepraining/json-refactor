@@ -93,6 +93,7 @@
             case 'string':
                 return value + '';
             default :
+                !!window[format] && typeof window[format] == 'function' && (value = window[format](value));
                 return value;
         }
     }
@@ -101,37 +102,191 @@
      * 转换点语法的数据
      * @param target
      * @param mapKey
-     * @param originKeyArrayByDot
+     * @param originalKey
      * @param format
      */
-    function convertDataOfDotKey(target, mapKey, originKeyArrayByDot, format) {
-        var length = originKeyArrayByDot.length,
+    function convertDataOfDotKey(target, mapKey, originalKey, format) {
+        var originKeyArrayByDot = originalKey.split('.'),//用点号分隔originKey(目前最多只\支持四级)
+            length = originKeyArrayByDot.length,
+            lastKey = originKeyArrayByDot[length - 1],//最后一个键
+            hasArrayMark = !!~lastKey.indexOf('[]'),//是否有数组操作标记
             value;
         if (length == 2) {
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]];
+            hasArrayMark ? (
+                value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]]
+            ) : (
+                value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]]
+            );
         } else if (length == 3) {
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]];
-        }else if (length == 4) {
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]][originKeyArrayByDot[3]];
+            hasArrayMark ? (
+                value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
+                    target[originKeyArrayByDot[0]][originKeyArrayByDot[1]]
+            ) : (
+                value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
+                    target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]]
+            );
+
+        } else if (length == 4) {
+            hasArrayMark ? (
+                value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
+                    target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]] != undefined &&
+                    target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]]
+            ) : (
+                value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
+                    target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]] != undefined &&
+                    target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]][originKeyArrayByDot[3]]
+            );
+
         }
-         else {
+        else {
             console.error("点语法的解析最大只支持四级");
             return;
         }
 
-        typeof value != 'object' ? (
-            target[mapKey] = !format ? value : convertDataType(value, format)
+        hasArrayMark ? (
+            target[mapKey] = getDataOfArrayMark(value, lastKey)
         ) : (
-            Array.isArray(value) ? (
-                target[mapKey] = cloneArray(value)
+            typeof value != 'object' ? (
+                target[mapKey] = !format ? value : convertDataType(value, format)
             ) : (
-                target[mapKey] = cloneObject(value)
+                Array.isArray(value) ? (
+                    target[mapKey] = cloneArray(value)
+                ) : (
+                    target[mapKey] = cloneObject(value)
+                )
             )
         );
+
     }
+
+    /**
+     * 转换普通值
+     * @param target
+     * @param mapKey
+     * @param originalKey
+     * @param format
+     */
+    function convertDataOfCommon(target, mapKey, originalKey, format) {
+        var targetValue = target[originalKey];//目标值
+        target[mapKey] = !format ? targetValue : convertDataType(targetValue, format);
+        delete target[originalKey];
+    }
+
+    /**
+     * 转换数组操作
+     * @param target
+     * @param mapKey
+     * @param originalKey
+     */
+    function convertDataOfArrayMark(target, mapKey, originalKey) {
+        target[mapKey] = getDataOfArrayMark(target, originalKey);
+    }
+
+    /**
+     * 获取数组操作的值
+     * @param target
+     * @param originalKey
+     * @returns {*}
+     */
+    function getDataOfArrayMark(target, originalKey) {
+        var originalKeyArray = originalKey.split("|"),
+            key = originalKeyArray[0].slice(0, -2),//操作属性
+            subKey = originalKeyArray[1],//对每一个数组中都要操作的值
+            action = originalKeyArray[2],//操作
+            actionExtra = originalKeyArray[3],//actionExtra
+            subAction = originalKeyArray[4],//subAction
+            hasSubAction = !!subAction,//是否有子操作
+            subActionFunction,//subAction对应的函数
+            targetValueOfKey = target[key];
+
+        var sumValue = 0,
+            averageValue = 0,
+            maxValue = 0,
+            minValue = 0,
+            concatArray = [];
+        if (!targetValueOfKey || !Array.isArray(targetValueOfKey)) {
+            console.error("配置的键 " + key + " 不存在，或者值不是数组");
+            return;
+        }
+
+        if (hasSubAction) {
+            switch (subAction) {
+                case "round":
+                    subActionFunction = Math.round;
+                    break;
+                case "floor":
+                    subActionFunction = Math.floor;
+                    break;
+                case "ceil":
+                    subActionFunction = Math.ceil;
+                    break;
+                case "abs":
+                    subActionFunction = Math.abs;
+                    break;
+                default:
+                    break
+            }
+        }
+
+        switch (action) {
+            //求和
+            case "sum":
+                targetValueOfKey.map(function (item) {
+                    hasSubAction ? (
+                        sumValue += subActionFunction(item[subKey])
+                    ) : (
+                        sumValue += item[subKey]
+                    );
+
+                });
+                return sumValue;
+            //求平均
+            case "average":
+                targetValueOfKey.map(function (item) {
+                    hasSubAction ? (
+                        sumValue += subActionFunction(item[subKey])
+                    ) : (
+                        sumValue += item[subKey]
+                    );
+
+                });
+                averageValue = sumValue / targetValueOfKey.length;
+                return averageValue;
+            //求最大值
+            case "max":
+                targetValueOfKey.map(function (item, index) {
+                    var value = hasSubAction ? subActionFunction(item[subKey]) : item[subKey];
+                    !index ? (
+                        maxValue = value
+                    ) : (
+                        value > maxValue && (maxValue = value)
+                    );
+                });
+                return maxValue;
+            //求最小值
+            case "min":
+                targetValueOfKey.map(function (item, index) {
+                    var value = hasSubAction ? subActionFunction(item[subKey]) : item[subKey];
+                    !index ? (
+                        minValue = value
+                    ) : (
+                        value < minValue && (minValue = value)
+                    );
+                });
+                return minValue;
+            //求字符串链接
+            case "concat":
+                targetValueOfKey.map(function (item) {
+                    var value = hasSubAction ? item[subKey][subAction]() : item[subKey];
+                    concatArray.push(value);
+                });
+                return concatArray.join(!actionExtra ? "" : actionExtra);
+            default:
+                return;
+        }
+
+    }
+
     /**
      * 转换值
      * @param target 目标对象
@@ -141,20 +296,29 @@
     function convertValue(target, map, mapKey) {
         //字符串
         var mapValue = map[mapKey],//map值
-            mapValueArray = mapValue.split('!'),
+            mapValueArray = mapValue.split('!'),//map value: "key!format", 感叹号前面是键值，感叹号后面是转换值
             originalKey = mapValueArray[0],//原始键
-        //map value: "key!format", 感叹号前面是键值，感叹号后面是转换值
-            format = mapValueArray[1],//格式
-            targetValue = target[originalKey];//目标值
+            format = mapValueArray[1];//格式
 
         var hasDot = !!~originalKey.indexOf('.'),//里面是否有点号
-            originKeyArrayByDot = hasDot && originalKey.split('.');//用点号分隔originKey(目前最多只\支持四级)
+            hasArrayMark = !hasDot && !!~originalKey.indexOf('[]');//是否有数组标示
 
-        hasDot && originKeyArrayByDot.length > 1? (
-            convertDataOfDotKey(target, mapKey, originKeyArrayByDot, format)
+        //有点操作符
+        hasDot ? (
+            originalKey.split('.').length > 1 ? (
+                convertDataOfDotKey(target, mapKey, originalKey, format)
+            ) : (
+                console.error("配置键名 " + mapValue + " 有误")
+            )
+
         ) : (
-            target[mapKey] = !format ? targetValue : convertDataType(targetValue, format),
-                delete target[originalKey]
+            //数组操作
+            hasArrayMark ? (
+                convertDataOfArrayMark(target, mapKey, originalKey)
+            ) : (
+                //普通操作
+                convertDataOfCommon(target, mapKey, originalKey, format)
+            )
         );
 
 
