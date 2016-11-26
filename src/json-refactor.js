@@ -13,6 +13,15 @@
 // Pass this if window is not defined yet
 }(typeof window !== "undefined" ? window : this, function (window, noGlobal) {
 
+    /**
+     * 模拟函数
+     * @param data
+     * @returns {*}
+     */
+    function fakeFunctionWithReturn (data) {
+        return data;
+    }
+
     //克隆对象
     function cloneObject() {
         var obj = arguments[0];
@@ -27,7 +36,6 @@
         var attrs = arguments[1], attr;
         var enable_spec_attr = true;
         if (!(attrs instanceof Array)) {
-            //console.log(attrs);
             attrs = obj;
             enable_spec_attr = false;
         }
@@ -36,7 +44,6 @@
         var i;
         for (i in attrs) {
             attr = enable_spec_attr ? attrs[i] : i;
-            //console.log(attr);
             if (obj.hasOwnProperty(attr)) {
                 if (obj[attr] instanceof Array) {
                     result[attr] = cloneArray(obj[attr]);
@@ -62,16 +69,13 @@
 
         var result = [];
 
-        var i;
-        for (i in array) {
-            if (typeof array[i] !== 'object') {
-                result[i] = array[i];
-                continue;
-            }
-
-            //clone object
-            result[i] = cloneObject(array[i]);
-        }
+        array.map(function (item, index) {
+            typeof array[i] !== 'object' ? (
+                result[index] = item
+            ) : (
+                result[index] = cloneObject(item)
+            )
+        });
 
         return result;
     }
@@ -93,7 +97,9 @@
             case 'string':
                 return value + '';
             default :
-                !!window[format] && typeof window[format] == 'function' && (value = window[format](value));
+                !!window[format] && typeof window[format] == 'function' ? (value = window[format](value)) : (
+                    console.error("" + format + "：没有此内置操作，也无此全局函数")
+                );
                 return value;
         }
     }
@@ -226,6 +232,8 @@
                     subActionFunction = Math.abs;
                     break;
                 default:
+                    subActionFunction = fakeFunctionWithReturn;
+                    action != "concat" && console.error("子操作 " + subAction + " 不存在");
                     break
             }
         }
@@ -284,6 +292,7 @@
                 });
                 return concatArray.join(!actionExtra ? "" : actionExtra);
             default:
+                console.error("操作 " + action + " 不存在");
                 return;
         }
 
