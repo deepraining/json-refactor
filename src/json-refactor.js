@@ -2,16 +2,7 @@
  * json-refactor
  * Created by senntyou on 2016/11/22.
  */
-(function (global, factory) {
-
-    if (typeof module === "object" && typeof module.exports === "object") {
-        module.exports = factory(global, true);
-    } else {
-        factory(global);
-    }
-
-// Pass this if window is not defined yet
-}(typeof window !== "undefined" ? window : this, function (window, noGlobal) {
+(function( window ) {
 
     /**
      * 模拟函数
@@ -390,8 +381,12 @@
         return target;
     };
 
-    if (!noGlobal) {
+    if ( typeof define === "function" && define.amd ) {
+        define(function() { return jsonRefactor; });
+    } else if ( typeof module !== "undefined" && module.exports ) {
+        module.exports = jsonRefactor;
+    } else {
         window.JSON.refactor = jsonRefactor;
     }
-    return jsonRefactor;
-}));
+
+})( window );
