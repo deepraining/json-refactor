@@ -330,11 +330,13 @@
 
     //格式化json
     function format(target, map) {
+        if (!map || typeof map != 'object') return;
+
         //是数组
         Array.isArray(map) ? (
             target.map(function (item) {
                 //如果是对象或数组
-                if (!!map[0] && typeof item == 'object') format(item, map[0]);
+                !!map[0] && typeof map[0] == 'object' && typeof item == 'object' && format(item, map[0]);
             })
         ) : (
             //是对象
@@ -344,17 +346,18 @@
 
                 mapValue = map[mapKey];
                 //如果是以下划线开头，并且在原数据中不存在这个键，则就是某个字段的二次改变
-                if (mapKey.startsWith('_') && target[mapKey] == undefined) {
+                if (mapKey.startsWith('_') && typeof target[mapKey] == 'undefined') {
                     targetValue = target[mapKey.slice(1)];
                 } else {
                     targetValue = target[mapKey];
                 }
                 //是对象或数组并且原数据中存在这个字段
                 if (typeof mapValue == 'object' && !!targetValue) {
+                    if (!mapValue || typeof mapValue != 'object') return;
                     Array.isArray(mapValue) ? (//array
                         targetValue.map(function (item) {
                             //如果是对象或数组
-                            if (!!mapValue[0] && typeof item == 'object') format(item, mapValue[0]);
+                            if (!!mapValue[0] && typeof mapValue[0] == 'object' && typeof item == 'object') format(item, mapValue[0]);
                         })
                     ) : (//object
                         format(targetValue, mapValue)
@@ -377,7 +380,7 @@
             source instanceof Array ? cloneArray(source) : cloneObject(source)
         ) : source;
 
-        format(target, map);
+        !!map && typeof map == 'object' ? format(target, map) : console.error("传入的map格式有误，请传入对象或数组");
         return target;
     };
 
