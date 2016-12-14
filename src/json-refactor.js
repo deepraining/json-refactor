@@ -353,7 +353,6 @@
                 }
                 //是对象或数组并且原数据中存在这个字段
                 if (typeof mapValue == 'object' && !!targetValue) {
-                    if (!mapValue || typeof mapValue != 'object') return;
                     Array.isArray(mapValue) ? (//array
                         targetValue.map(function (item) {
                             //如果是对象或数组
@@ -362,9 +361,13 @@
                     ) : (//object
                         format(targetValue, mapValue)
                     );
-                } else
-                //字符串
+                } else if (typeof mapValue == 'string') {
+                    //字符串
                     convertValue(target, map, mapKey);
+                }
+                else {
+                    console.error('无法解析key: ' + mapValue);
+                }
             })
         );
     }
