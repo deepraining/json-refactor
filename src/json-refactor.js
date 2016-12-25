@@ -366,7 +366,7 @@
                     convertValue(target, map, mapKey);
                 }
                 else {
-                    console.error('无法解析key: ' + mapValue);
+                    console.error('无法解析key: \n' + (typeof mapValue == 'string' ? mapValue : (typeof mapValue == 'object' ? JSON.stringify(mapValue) : '')));
                 }
             })
         );
