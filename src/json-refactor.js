@@ -61,7 +61,7 @@
         var result = [];
 
         array.map(function (item, index) {
-            typeof array[i] !== 'object' ? (
+            typeof item !== 'object' ? (
                 result[index] = item
             ) : (
                 result[index] = cloneObject(item)
