@@ -32,9 +32,9 @@
         }
 
         var result = {};
-        var i;
-        for (i in attrs) {
-            attr = enable_spec_attr ? attrs[i] : i;
+        var key;
+        for (key in attrs) {
+            attr = enable_spec_attr ? attrs[key] : key;
             if (obj.hasOwnProperty(attr)) {
                 if (obj[attr] instanceof Array) {
                     result[attr] = cloneArray(obj[attr]);
