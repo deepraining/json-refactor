@@ -169,6 +169,10 @@ var a = [
             j: {
                 j: "j!bool"
             }
+        },
+        zzzz: 'zzz',
+        _zzzz: {
+            haha: 'hehe'
         }
     }];
 console.log(JSON.refactor(a, b));

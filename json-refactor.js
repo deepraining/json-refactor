@@ -2,7 +2,7 @@
  * json-refactor
  * Created by senntyou on 2016/11/22.
  */
-(function( window ) {
+(function( self ) {
 
     /**
      * 模拟函数
@@ -88,7 +88,7 @@
             case 'string':
                 return value + '';
             default :
-                !!window[format] && typeof window[format] == 'function' ? (value = window[format](value)) : (
+                !!self[format] && typeof self[format] == 'function' ? (value = self[format](value)) : (
                     console.error("" + format + "：没有此内置操作，也无此全局函数")
                 );
                 return value;
@@ -348,11 +348,14 @@
                 //如果是以下划线开头，并且在原数据中不存在这个键，则就是某个字段的二次改变
                 if (mapKey.startsWith('_') && typeof target[mapKey] == 'undefined') {
                     targetValue = target[mapKey.slice(1)];
+                    // 如果值不存在，返回
+                    if (!targetValue) return;
                 } else {
                     targetValue = target[mapKey];
                 }
+
                 //是对象或数组并且原数据中存在这个字段
-                if (typeof mapValue == 'object' && !!targetValue) {
+                if (typeof mapValue == 'object') {
                     Array.isArray(mapValue) ? (//array
                         targetValue.map(function (item) {
                             //如果是对象或数组
@@ -387,12 +390,6 @@
         return target;
     };
 
-    if ( typeof define === "function" && define.amd ) {
-        define(function() { return jsonRefactor; });
-    } else if ( typeof module !== "undefined" && module.exports ) {
-        module.exports = jsonRefactor;
-    } else {
-        window.JSON.refactor = jsonRefactor;
-    }
+    JSON.refactor = jsonRefactor;
 
-})( window );
+})( this );
