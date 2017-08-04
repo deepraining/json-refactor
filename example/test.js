@@ -173,6 +173,11 @@ var a = [
         zzzz: 'zzz',
         _zzzz: {
             haha: 'hehe'
-        }
+        },
+        xxx: [
+            {
+                xx: 'xxxx'
+            }
+        ]
     }];
 console.log(JSON.refactor(a, b));
