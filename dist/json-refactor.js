@@ -98,54 +98,53 @@ function convertDataType(value, format) {
  * @param format
  */
 function convertDataOfDotKey(target, mapKey, originalKey, format) {
-    var originKeyArrayByDot = originalKey.split('.'),//用点号分隔originKey(目前最多只\支持四级)
+    var originKeyArrayByDot = originalKey.split('.'),//用点号分隔originKey(目前最多只支持四级)
         length = originKeyArrayByDot.length,
         lastKey = originKeyArrayByDot[length - 1],//最后一个键
         hasArrayMark = !!~lastKey.indexOf('[]'),//是否有数组操作标记
         value;
-    if (length == 2) {
-        hasArrayMark ? (
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]]
-        ) : (
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]]
-        );
-    } else if (length == 3) {
-        hasArrayMark ? (
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]]
-        ) : (
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]]
-        );
 
-    } else if (length == 4) {
-        hasArrayMark ? (
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]]
-        ) : (
-            value = target[originKeyArrayByDot[0]] != undefined && target[originKeyArrayByDot[0]][originKeyArrayByDot[1]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]] != undefined &&
-                target[originKeyArrayByDot[0]][originKeyArrayByDot[1]][originKeyArrayByDot[2]][originKeyArrayByDot[3]]
-        );
+    var tempTarget = target, i = 0;
 
+    if (hasArrayMark) {
+        for (i = 0; i < length - 1; i++) {
+            if (typeof tempTarget[originKeyArrayByDot[i]] != 'undefined') {
+                tempTarget = tempTarget[originKeyArrayByDot[i]];
+                value = tempTarget;
+            }
+            else {
+                value = void 0;
+                break;
+            }
+        }
     }
     else {
-        console.error("点语法的解析最大只支持四级");
-        return;
+        for (i = 0; i < length; i++) {
+            if (typeof tempTarget[originKeyArrayByDot[i]] != 'undefined') {
+                tempTarget = tempTarget[originKeyArrayByDot[i]];
+                value = tempTarget;
+            }
+            else {
+                value = void 0;
+                break;
+            }
+        }
     }
+
+    if (typeof value == 'undefined') return;
 
     hasArrayMark ? (
         target[mapKey] = getDataOfArrayMark(value, lastKey)
     ) : (
-        typeof value != 'object' ? (
-            target[mapKey] = !format ? value : convertDataType(value, format)
-        ) : (
+        // typeof null == 'object'
+        !!value && typeof value == 'object' ? (
             Array.isArray(value) ? (
                 target[mapKey] = cloneArray(value)
             ) : (
                 target[mapKey] = cloneObject(value)
             )
+        ) : (
+            target[mapKey] = !format ? value : convertDataType(value, format)
         )
     );
 
@@ -325,7 +324,7 @@ function convertValue(target, map, mapKey) {
 
 // 检查target与map的类型是否匹配
 function checkTargetMapMatch (target, map) {
-    if (typeof target != 'object' || typeof map != 'object') {
+    if (!target || !map || typeof target != 'object' || typeof map != 'object') {
         console.error('target与map必须是对象或数组');
         console.error('target: ' + JSON.stringify(target));
         console.error('map: ' + JSON.stringify(map));
@@ -404,11 +403,11 @@ function format(target, map) {
  */
 var jsonRefactor = function (source, map, returnNewJson) {
 
-    if (typeof source != 'object') {
+    if (!source || typeof source != 'object') {
         console.error("传入的source格式有误，请传入对象或数组");
         return target;
     }
-    if (typeof map != 'object') {
+    if (!map || typeof map != 'object') {
         console.error("传入的map格式有误，请传入对象或数组");
         return target;
     }

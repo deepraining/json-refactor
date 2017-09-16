@@ -73,7 +73,8 @@ var a = [
                 j: {
                     j: 12
                 }
-            }
+            },
+            w: {w: {w: {w: {w: {w: null}}}}}
         },
         {
             a: {
@@ -139,7 +140,8 @@ var a = [
                 j: {
                     j: 0
                 }
-            }
+            },
+            w: {w: {w: {w: {w: {w: '六级'}}}}}
         }
     ],
     b = [{
@@ -178,6 +180,7 @@ var a = [
             {
                 xx: 'xxxx'
             }
-        ]
+        ],
+        www: 'w.w.w.w.w.w'
     }];
 console.log(JSON.refactor(a, b));

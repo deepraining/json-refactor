@@ -192,7 +192,7 @@ JSON.refactor(source, map, returnNewJson)
   1. "key!handle"，在原来的键名后面加上叹号和操作符
   2. 对于内置数据操作，handle的可操作值为（int, float, string, bool）
   3. 对于函数操作符，handle应该是一个全局函数(不应与内置数据操作符冲突)，传入键名对应的值，返回新值
-* "." 点语法，用点表示属性选择，目前只支持四级（只向下取值，不向上取值）
+* "." 点语法，用点表示属性选择（只向下取值，不向上取值）
 * "key[]|subKey|action|actionExtra|subAction" 数组操作，这个必须map值得末尾，且不应该有 "!" 操作符
   1. key: 操作属性（值必须是一个数组）
   2. subKey: 对每一个数组中都要操作的值

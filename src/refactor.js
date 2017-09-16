@@ -61,11 +61,11 @@ function format(target, map) {
  */
 var jsonRefactor = function (source, map, returnNewJson) {
 
-    if (typeof source != 'object') {
+    if (!source || typeof source != 'object') {
         console.error("传入的source格式有误，请传入对象或数组");
         return target;
     }
-    if (typeof map != 'object') {
+    if (!map || typeof map != 'object') {
         console.error("传入的map格式有误，请传入对象或数组");
         return target;
     }
