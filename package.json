@@ -1,14 +1,29 @@
 {
   "name": "json-refactor",
+  "version": "0.1.1",
+  "description": "Refactor JSON object structure based on provided rules.",
+  "homepage": "https://github.com/senntyou/json-refactor",
+  "author": "senntyou",
+  "keywords": [
+    "json",
+    "refactor",
+    "format",
+    "rule",
+    "structure"
+  ],
   "main": "dist/json-refactor.js",
-  "version": "0.1.0",
-  "description": "json refactor",
   "license": "MIT",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senntyou/json-refactor"
+  },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.5.3",
-    "gulp-wrap": "^0.13.0"
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "moment": "^2.20.1",
+    "webpack": "^3.10.0"
   }
 }
