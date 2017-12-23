@@ -1,4 +1,4 @@
-# orchids changelog
+# json-refactor changelog
 
 ## 0.1.1
 
