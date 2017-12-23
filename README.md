@@ -24,7 +24,7 @@ var newJson = JSON.refactor(target, keysMap, returnNew);
 
 * `target`: Target object
 * `keysMap`: Keys map to refactor
-* `returnNew`: Whether return new json, if true, a new clone target will be return, and the origin target will be not be modified 
+* `returnNew`: Whether return new json, if true, a new clone target will be return, and the origin target will not be modified 
 
 ## keysMap
 
@@ -48,7 +48,7 @@ result:
 {aaa: 1, bbb: 2}
 ```
 
-### keysMap should have the same structure of target json object, includes array
+### keysMap should have the same structure with target json object, includes array
 
 target: 
 
@@ -156,7 +156,7 @@ register a operation
 ```
 // register a operator
 jsonRefactor.register(test, handler);
-jsonRefactor.register({test: 'test', handler: function(){}});
+jsonRefactor.register({test: 'test', handler: function(originValue, operator){}});
 
 // register multi operators
 jsonRefactor.register([{...}, {...}, ...]);
@@ -219,7 +219,7 @@ result:
  
 ```
 {
-    newKey: 3
+    newKey: 9
 }
 ```
 
@@ -228,5 +228,31 @@ result:
 get an average value specified by a key of every element, within an array.
  
 format: `average!key`
+
+example: 
+
+target: 
+
+```
+{
+    oldKey: [{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]
+}
+```
+
+keysMap: 
+
+```
+{
+    newKey: 'oldKey|sum!a'
+}
+```
+
+result:
+ 
+```
+{
+    newKey: 3
+}
+```
 
 ## [demo code](./example)
