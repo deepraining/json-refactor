@@ -26,7 +26,7 @@ module.exports = {
      */
     keepOnHandling: '_',
     /**
-     * delimiter of multi operators
+     * delimiter of operators
      *
      * example:
      *     keysMap: {

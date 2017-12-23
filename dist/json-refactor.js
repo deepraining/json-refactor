@@ -1,425 +1,806 @@
-(function( self ) {
- /**
- * 模拟函数
- * @param data
+/*!
+ * 
+ *     json-refactor v0.1.1
+ * 
+ *     https://github.com/senntyou/json-refactor
+ * 
+ *     @senntyou <jiangjinbelief@163.com>
+ * 
+ *     2017-12-23 16:14:55
+ *     
+ */
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["jsonRefactor"] = factory();
+	else
+		root["jsonRefactor"] = factory();
+})(typeof self !== 'undefined' ? self : this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var prefix = 'json-refactor: ';
+
+module.exports = {
+    log: function log(str) {
+        console.log(prefix + str);
+    },
+    info: function info(str) {
+        console.info(prefix + str);
+    },
+    warn: function warn(str) {
+        console.warn(prefix + str);
+    },
+    error: function error(str) {
+        console.error(prefix + str);
+    },
+    throwError: function throwError(str) {
+        throw new Error(prefix + str);
+    }
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+module.exports = {
+  /**
+   * make a new key, and keep on refactoring the new key
+   *
+   * example:
+   *     target: {
+   *         list: [
+   *             {
+   *                 id: id,
+   *                 name: name
+   *             }
+   *         ]
+   *     }
+   *     keysMap: {
+   *         data: 'list',
+   *         _data: [
+   *             {
+   *                 newId: 'id',
+   *                 newName: 'name'
+   *             }
+   *         ]
+   *     }
+   */
+  keepOnHandling: '_',
+  /**
+   * delimiter of operators
+   *
+   * example:
+   *     keysMap: {
+   *         toKey: 'fromKey|operator1|operator2|operator3'
+   *     }
+   */
+  operatorDelimiter: '|'
+};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+/**
+ * clone object
+ *
+ * @param obj
  * @returns {*}
  */
-function fakeFunctionWithReturn (data) {
-    return data;
-}
 
-//克隆对象
-function cloneObject() {
-    var obj = arguments[0];
-    if (typeof obj === 'undefined' || obj === null)
-        return {};
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-    if (typeof obj !== 'object')
-        return obj;
+var cloneObject = function cloneObject(obj) {
+    // empty value
+    if (typeof obj === 'undefined' || obj === null) return {};
 
-    //第二个参数是属性名称列表，就采用该列表进行刷选
-    //否则就克隆所有属性
-    var attrs = arguments[1], attr;
-    var enable_spec_attr = true;
-    if (!(attrs instanceof Array)) {
-        attrs = obj;
-        enable_spec_attr = false;
-    }
+    // not object
+    if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') return obj;
 
-    var result = {};
-    var key;
-    for (key in attrs) {
-        attr = enable_spec_attr ? attrs[key] : key;
-        if (obj.hasOwnProperty(attr)) {
-            if (obj[attr] instanceof Array) {
-                result[attr] = cloneArray(obj[attr]);
-            }
-            else if (typeof obj[attr] === 'object') {
-                result[attr] = cloneObject(obj[attr]);
-            } else {
-                result[attr] = obj[attr];
-            }
+    var value,
+        result = {};
+
+    for (var key in obj) {
+        if (!obj.hasOwnProperty(key)) continue;
+
+        value = obj[key];
+        if (value instanceof Array) {
+            result[key] = cloneArray(value);
+        } else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+            result[key] = cloneObject(value);
+        } else {
+            result[key] = value;
         }
     }
 
     return result;
-}
+};
 
-//克隆数组
-function cloneArray(array) {
-    if (typeof array === 'undefined' || array === null)
-        return [];
+/**
+ * clone array
+ *
+ * @param arr
+ * @returns {Array}
+ */
+var cloneArray = function cloneArray(arr) {
+    // empty value
+    if (typeof arr === 'undefined' || arr === null) return [];
 
-    if (!(array instanceof Array))
-        return [];
+    // not array
+    if (!(arr instanceof Array)) return [];
 
     var result = [];
-
-    array.map(function (item, index) {
-        typeof item !== 'object' ? (
-            result[index] = item
-        ) : (
-            result[index] = cloneObject(item)
-        )
+    arr.forEach(function (item, index) {
+        if (item instanceof Array) result[index] = cloneArray(item);else if (item == 'object') result[index] = cloneObject(item);else result[index] = item;
     });
 
     return result;
-}
-
-/**
- * 转换类型
- * @param value 带转换的值
- * @param format 格式
- * @returns {*}
- */
-function convertDataType(value, format) {
-    switch (format) {
-        case 'int':
-            return parseInt(value);
-        case 'float':
-            return parseFloat(value);
-        case 'bool':
-            return !!value;
-        case 'string':
-            return value + '';
-        default :
-            !!self[format] && typeof self[format] == 'function' ? (value = self[format](value)) : (
-                console.error("" + format + "：没有此内置操作，也无此全局函数")
-            );
-            return value;
-    }
-}
-
-/**
- * 转换点语法的数据
- * @param target
- * @param mapKey
- * @param originalKey
- * @param format
- */
-function convertDataOfDotKey(target, mapKey, originalKey, format) {
-    var originKeyArrayByDot = originalKey.split('.'),//用点号分隔originKey(目前最多只支持四级)
-        length = originKeyArrayByDot.length,
-        lastKey = originKeyArrayByDot[length - 1],//最后一个键
-        hasArrayMark = !!~lastKey.indexOf('[]'),//是否有数组操作标记
-        value;
-
-    var tempTarget = target, i = 0;
-
-    if (hasArrayMark) {
-        for (i = 0; i < length - 1; i++) {
-            if (typeof tempTarget[originKeyArrayByDot[i]] != 'undefined') {
-                tempTarget = tempTarget[originKeyArrayByDot[i]];
-                value = tempTarget;
-            }
-            else {
-                value = void 0;
-                break;
-            }
-        }
-    }
-    else {
-        for (i = 0; i < length; i++) {
-            if (typeof tempTarget[originKeyArrayByDot[i]] != 'undefined') {
-                tempTarget = tempTarget[originKeyArrayByDot[i]];
-                value = tempTarget;
-            }
-            else {
-                value = void 0;
-                break;
-            }
-        }
-    }
-
-    if (typeof value == 'undefined') return;
-
-    hasArrayMark ? (
-        target[mapKey] = getDataOfArrayMark(value, lastKey)
-    ) : (
-        // typeof null == 'object'
-        !!value && typeof value == 'object' ? (
-            Array.isArray(value) ? (
-                target[mapKey] = cloneArray(value)
-            ) : (
-                target[mapKey] = cloneObject(value)
-            )
-        ) : (
-            target[mapKey] = !format ? value : convertDataType(value, format)
-        )
-    );
-
-}
-
-/**
- * 转换普通值
- * @param target
- * @param mapKey
- * @param originalKey
- * @param format
- * @param keepOriginKey
- */
-function convertDataOfCommon(target, mapKey, originalKey, format, keepOriginKey) {
-    var targetValue = target[originalKey];//目标值
-    target[mapKey] = !format ? targetValue : convertDataType(targetValue, format);
-    //如果原来的键与现在的键相同，则只是数据转换，不更换键名，不删除
-    mapKey != originalKey && !keepOriginKey && delete target[originalKey];
-}
-
-/**
- * 转换数组操作
- * @param target
- * @param mapKey
- * @param originalKey
- */
-function convertDataOfArrayMark(target, mapKey, originalKey) {
-    target[mapKey] = getDataOfArrayMark(target, originalKey);
-}
-
-/**
- * 获取数组操作的值
- * @param target
- * @param originalKey
- * @returns {*}
- */
-function getDataOfArrayMark(target, originalKey) {
-    var originalKeyArray = originalKey.split("|"),
-        key = originalKeyArray[0].slice(0, -2),//操作属性
-        subKey = originalKeyArray[1],//对每一个数组中都要操作的值
-        action = originalKeyArray[2],//操作
-        actionExtra = originalKeyArray[3],//actionExtra
-        subAction = originalKeyArray[4],//subAction
-        hasSubAction = !!subAction,//是否有子操作
-        subActionFunction,//subAction对应的函数
-        targetValueOfKey = target[key];
-
-    var sumValue = 0,
-        averageValue = 0,
-        maxValue = 0,
-        minValue = 0,
-        concatArray = [];
-    if (!targetValueOfKey || !Array.isArray(targetValueOfKey)) {
-        console.error("配置的键 " + key + " 不存在，或者值不是数组");
-        return;
-    }
-
-    if (hasSubAction) {
-        switch (subAction) {
-            case "round":
-                subActionFunction = Math.round;
-                break;
-            case "floor":
-                subActionFunction = Math.floor;
-                break;
-            case "ceil":
-                subActionFunction = Math.ceil;
-                break;
-            case "abs":
-                subActionFunction = Math.abs;
-                break;
-            default:
-                subActionFunction = fakeFunctionWithReturn;
-                action != "concat" && console.error("子操作 " + subAction + " 不存在");
-                break
-        }
-    }
-
-    switch (action) {
-        //求和
-        case "sum":
-            targetValueOfKey.map(function (item) {
-                hasSubAction ? (
-                    sumValue += subActionFunction(item[subKey])
-                ) : (
-                    sumValue += item[subKey]
-                );
-
-            });
-            return sumValue;
-        //求平均
-        case "average":
-            targetValueOfKey.map(function (item) {
-                hasSubAction ? (
-                    sumValue += subActionFunction(item[subKey])
-                ) : (
-                    sumValue += item[subKey]
-                );
-
-            });
-            averageValue = sumValue / targetValueOfKey.length;
-            return averageValue;
-        //求最大值
-        case "max":
-            targetValueOfKey.map(function (item, index) {
-                var value = hasSubAction ? subActionFunction(item[subKey]) : item[subKey];
-                !index ? (
-                    maxValue = value
-                ) : (
-                    value > maxValue && (maxValue = value)
-                );
-            });
-            return maxValue;
-        //求最小值
-        case "min":
-            targetValueOfKey.map(function (item, index) {
-                var value = hasSubAction ? subActionFunction(item[subKey]) : item[subKey];
-                !index ? (
-                    minValue = value
-                ) : (
-                    value < minValue && (minValue = value)
-                );
-            });
-            return minValue;
-        //求字符串链接
-        case "concat":
-            targetValueOfKey.map(function (item) {
-                var value = hasSubAction ? item[subKey][subAction]() : item[subKey];
-                concatArray.push(value);
-            });
-            return concatArray.join(!actionExtra ? "" : actionExtra);
-        default:
-            console.error("操作 " + action + " 不存在");
-            return;
-    }
-
-}
-
-/**
- * 转换值
- * @param target 目标对象
- * @param map map
- * @param mapKey map中的key
- */
-function convertValue(target, map, mapKey) {
-    //字符串
-    var originMapValue = map[mapKey],//map值
-        keepOriginKey = !!~originMapValue.indexOf('^'),//是否保留原来的键名
-        mapValue = keepOriginKey ? originMapValue.slice(0, -1) : originMapValue,//map值
-        mapValueArray = mapValue.split('!'),//map value: "key!format", 感叹号前面是键值，感叹号后面是转换值
-        originalKey = mapValueArray[0],//原始键
-        format = mapValueArray[1];//格式
-
-    var hasDot = !!~originalKey.indexOf('.'),//里面是否有点号
-        hasArrayMark = !hasDot && !!~originalKey.indexOf('[]');//是否有数组标示
-
-    //有点操作符
-    hasDot ? (
-        originalKey.split('.').length > 1 ? (
-            convertDataOfDotKey(target, mapKey, originalKey, format)
-        ) : (
-            console.error("配置键名 " + mapValue + " 有误")
-        )
-
-    ) : (
-        //数组操作
-        hasArrayMark ? (
-            convertDataOfArrayMark(target, mapKey, originalKey)
-        ) : (
-            //普通操作
-            convertDataOfCommon(target, mapKey, originalKey, format, keepOriginKey)
-        )
-    );
-
-
-}
-
-// 检查target与map的类型是否匹配
-function checkTargetMapMatch (target, map) {
-    if (!target || !map || typeof target != 'object' || typeof map != 'object') {
-        console.error('target与map必须是对象或数组');
-        console.error('target: ' + JSON.stringify(target));
-        console.error('map: ' + JSON.stringify(map));
-        return !1;
-    }
-
-    if (Array.isArray(map) && !Array.isArray(target) || !Array.isArray(map) && Array.isArray(target)) {
-        console.error('target类型与map类型不匹配');
-        console.error('target: ' + JSON.stringify(target));
-        console.error('map: ' + JSON.stringify(map));
-        return !1;
-    }
-
-    return !0
-}
-
-//格式化json
-function format(target, map) {
-
-    if (!checkTargetMapMatch(target, map)) return;
-
-    //是数组
-    if (Array.isArray(map)) {
-        target.map(function (item) {
-            format(item, map[0]);
-        });
-    }
-    //是对象
-    else {
-        Object.keys(map).map(function (mapKey) {
-            var mapValue,//map值
-                targetValue;//目标值
-
-            mapValue = map[mapKey];
-            //如果是以下划线开头，并且在原数据中不存在这个键，则就是某个字段的二次改变
-            if (mapKey.slice(0, 1) == '_'  && typeof target[mapKey] == 'undefined') {
-                targetValue = target[mapKey.slice(1)];
-            } else {
-                targetValue = target[mapKey];
-            }
-
-            //是对象或数组并且原数据中存在这个字段
-            if (typeof mapValue == 'object') {
-
-                if (!checkTargetMapMatch(targetValue, mapValue)) return;
-
-                //array
-                if (Array.isArray(mapValue)) {
-                    targetValue.map(function (item) {
-                        if (!checkTargetMapMatch(item, mapValue[0])) return;
-
-                        format(item, mapValue[0]);
-                    })
-                }
-                //object
-                else {
-                    format(targetValue, mapValue);
-                }
-            }
-            else if (typeof mapValue == 'string') {
-                //字符串
-                convertValue(target, map, mapKey);
-            }
-            else {
-                console.error('无法解析key: \n' + (typeof mapValue == 'string' ? mapValue : (typeof mapValue == 'object' ? JSON.stringify(mapValue) : '')));
-            }
-        })
-    }
-}
-
-/**
- * 初始函数
- * @param source 原对象
- * @param map 键值地图
- * @param returnNewJson 是否返回新的json文件（默认：false）
- */
-var jsonRefactor = function (source, map, returnNewJson) {
-
-    if (!source || typeof source != 'object') {
-        console.error("传入的source格式有误，请传入对象或数组");
-        return target;
-    }
-    if (!map || typeof map != 'object') {
-        console.error("传入的map格式有误，请传入对象或数组");
-        return target;
-    }
-
-    var target = !!returnNewJson ? (
-        Array.isArray(source) ? cloneArray(source) : cloneObject(source)
-    ) : source;
-
-    format(target, map);
-
-    return target;
 };
 
-JSON.refactor = jsonRefactor; 
-})( this );
+/**
+ * clone object or array
+ *
+ * @param target
+ * @returns {*}
+ */
+module.exports = function (target) {
+    if (!target || (typeof target === 'undefined' ? 'undefined' : _typeof(target)) != 'object') return target;
+
+    if (target instanceof Array) return cloneArray(target);else return cloneObject(target);
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var logger = __webpack_require__(0);
+
+module.exports = function (target, keysMap) {
+
+    if (!target || (typeof target === 'undefined' ? 'undefined' : _typeof(target)) != 'object') {
+        logger.error('target is invalid, it should be a map or an array');
+        logger.error('target: ' + JSON.stringify(target));
+        return !1;
+    }
+
+    if (!keysMap || (typeof keysMap === 'undefined' ? 'undefined' : _typeof(keysMap)) != 'object') {
+        logger.error('keysMap is invalid, it should be a map or an array');
+        logger.error('keysMap: ' + JSON.stringify(keysMap));
+        return !1;
+    }
+
+    if (target instanceof Array && !(keysMap instanceof Array) || keysMap instanceof Array && !(target instanceof Array)) {
+        logger.error('target and keysMap are not the same type, they both should be Array or Object[map]');
+        logger.error('target: ' + JSON.stringify(target));
+        logger.error('keysMap: ' + JSON.stringify(keysMap));
+        return !1;
+    }
+
+    return !0;
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+/**
+ * operations collection
+ *
+ * @type {Array}
+ */
+
+module.exports = [
+  /**
+   * {
+   *     test: string/RegExp
+   *     handler: (originValue, operator) => {
+   *          // originValue: origin value of current key
+   *          // operator: operator of current handling
+   *
+   *          // must return a new value at last
+   *          return newValue;
+   *     }
+   * }
+   */
+];
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var refactor = __webpack_require__(6);
+var set = __webpack_require__(12);
+var register = __webpack_require__(13);
+
+// built in operations
+register(__webpack_require__(14));
+register(__webpack_require__(15));
+register(__webpack_require__(16));
+register(__webpack_require__(17));
+register(__webpack_require__(18));
+register(__webpack_require__(19));
+
+refactor.set = set;
+refactor.register = register;
+
+JSON.refactor = refactor;
+
+module.exports = refactor;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var logger = __webpack_require__(0);
+var clone = __webpack_require__(2);
+var check = __webpack_require__(3);
+var handle = __webpack_require__(7);
+
+/**
+ * main
+ *
+ * @param target Target object
+ * @param keysMap Keys map to refactor
+ * @param returnNew Whether return new json, if true, a new clone target will be return, and the origin target will be not be modified
+ */
+module.exports = function (target, keysMap, returnNew) {
+
+    if (!check(target, keysMap)) return target;
+
+    var newTarget = returnNew ? clone(target) : target;
+
+    handle(newTarget, keysMap);
+
+    return newTarget;
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var check = __webpack_require__(3);
+var logger = __webpack_require__(0);
+var marker = __webpack_require__(1);
+var convert = __webpack_require__(8);
+
+/**
+ * handle
+ *
+ * @param target Target to refactor
+ * @param keysMap
+ */
+var handle = function handle(target, keysMap) {
+
+    if (!check(target, keysMap)) return;
+
+    // array
+    if (Array.isArray(keysMap)) target.forEach(function (item) {
+        handle(item, keysMap[0]);
+    });
+
+    // object[map]
+    else Object.keys(keysMap).forEach(function (toKey) {
+            /**
+             * just copy value of fromKey to toKey
+             *
+             * toKey: fromKey
+             *
+             * example:
+             *     keysMap: {
+             *         newKey: originKey
+             *     }
+             */
+            var fromKey = keysMap[toKey];
+
+            /**
+             * more handling of value of toKey
+             *
+             * toKey: {...}/[...]
+             *
+             * example:
+             *     keysMap: {
+             *         originKey: {
+             *             // more handling
+             *         },
+             *         originKey: [
+             *             {
+             *                 // more handling
+             *             }
+             *         ]
+             *     }
+             *
+             */
+            var originValue = target[toKey];
+
+            if (toKey.slice(0, marker.keepOnHandling.length) === marker.keepOnHandling) {
+                originValue = target[toKey.slice(marker.keepOnHandling.length)];
+            }
+
+            /**
+             * fromKey is object
+             *
+             * example:
+             *     target: {
+             *         list: [
+             *             {
+             *                 id: id,
+             *                 name: name
+             *             }
+             *         ]
+             *     }
+             *     keysMap: {
+             *         list: [
+             *             {
+             *                 newId: 'id',
+             *                 newName: 'name'
+             *             }
+             *         ]
+             *     }
+             */
+            if ((typeof fromKey === 'undefined' ? 'undefined' : _typeof(fromKey)) == 'object') {
+                if (!check(originValue, fromKey)) return;
+
+                // is array
+                if (fromKey instanceof Array) {
+                    originValue.forEach(function (item) {
+                        if (!check(item, fromKey[0])) return;
+
+                        handle(item, fromKey[0]);
+                    });
+                }
+                // is object
+                else {
+                        handle(originValue, fromKey);
+                    }
+            }
+            /**
+             * is string
+             *
+             * toKey: fromKey
+             */
+            else if (typeof fromKey == 'string') {
+                    convert(target, keysMap, toKey);
+                }
+                // other
+                else {
+                        logger.error('can\'t resolve key: \n' + JSON.stringify(fromKey));
+                    }
+        });
+};
+
+module.exports = handle;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var marker = __webpack_require__(1);
+var type = __webpack_require__(9);
+var operations = __webpack_require__(4);
+var commonConvert = __webpack_require__(10);
+var dotConvert = __webpack_require__(11);
+
+/**
+ * covert target based on keysMap and toKey
+ *
+ * @param target
+ * @param keysMap
+ * @param toKey
+ */
+module.exports = function (target, keysMap, toKey) {
+    // fromKey|operator1|operator2|operator3
+    var originFromKey = keysMap[toKey];
+    // [fromKey, operator1, operator2, operator3]
+    var originFromKeyItems = originFromKey.split(marker.operatorDelimiter);
+    // real from key
+    var fromKey = originFromKeyItems.shift();
+    // all operators
+    var operators = originFromKeyItems;
+
+    // has dot mark
+    if (fromKey.indexOf('.') > -1) target[toKey] = dotConvert(target, fromKey);
+    // common
+    else target[toKey] = commonConvert(target, fromKey);
+
+    // handle operators and operations
+    operators.forEach(function (operator) {
+        operations.forEach(function (operation) {
+            // is string
+            if (typeof operation.test == 'string') {
+                if (operator == operation.test) target[toKey] = operation.handler(target[toKey], operator);
+            }
+            // is RegExp
+            else if (type(operation.test) == 'regexp') {
+                    if (operation.test.test(operator)) target[toKey] = operation.handler(target[toKey], operator);
+                }
+        });
+    });
+};
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+// from jquery[https://github.com/jquery/jquery/blob/master/src/core.js#L271]
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var class2type = {};
+var toString = class2type.toString;
+
+"Boolean Number String Function Array Date RegExp Object Error Symbol".split(" ").forEach(function (name) {
+    class2type["[object " + name + "]"] = name.toLowerCase();
+});
+
+module.exports = function (obj) {
+    if (obj == null) return obj + "";
+
+    return (typeof obj === "undefined" ? "undefined" : _typeof(obj)) === "object" || typeof obj === "function" ? class2type[toString.call(obj)] || "object" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+/**
+ * common convert
+ *
+ * @param target
+ * @param fromKey
+ * @returns {*}
+ */
+
+module.exports = function (target, fromKey) {
+  return target[fromKey];
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var clone = __webpack_require__(2);
+
+module.exports = function (target, fromKey) {
+    // [key, subKey, subSubKey]
+    var fromKeyItems = fromKey.split('.');
+    var result;
+
+    var tempTarget = target,
+        tempKey;
+    for (var i = 0; i < fromKeyItems.length; i++) {
+        tempKey = fromKeyItems[i];
+        // has value, continue
+        if (typeof tempTarget[tempKey] != 'undefined') {
+            tempTarget = tempTarget[tempKey];
+            result = tempTarget;
+        }
+        // no value, break
+        else {
+                result = void 0;
+                break;
+            }
+    }
+
+    // not find
+    if (typeof result == 'undefined') return;
+
+    // is object/array and not null, clone it
+    return result && (typeof result === 'undefined' ? 'undefined' : _typeof(result)) == 'object' ? clone(result) : result;
+};
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var marker = __webpack_require__(1);
+
+/**
+ * set custom markers
+ *
+ * @param option
+ */
+module.exports = function (option) {
+    if (!option || (typeof option === 'undefined' ? 'undefined' : _typeof(option)) != 'object') return;
+
+    for (var attr in option) {
+        if (option.hasOwnProperty(attr)) marker[attr] = option[attr];
+    }
+};
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var operations = __webpack_require__(4);
+
+/**
+ * register a operation
+ *
+ * @param test
+ * @param handler
+ */
+module.exports = function (test, handler) {
+    if (!test) return;
+
+    // map or array
+    if ((typeof test === 'undefined' ? 'undefined' : _typeof(test)) == 'object') {
+        // array
+        if (test instanceof Array) test.forEach(function (item) {
+            operations.push(item);
+        });
+        // map
+        else operations.push(test);
+    }
+    // string/regExp + handler
+    else operations.push({ test: test, handler: handler });
+};
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+module.exports = {
+    test: 'int',
+    handler: function handler(originValue) {
+        return parseInt(originValue);
+    }
+};
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+module.exports = {
+    test: 'float',
+    handler: function handler(originValue) {
+        return parseFloat(originValue);
+    }
+};
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+module.exports = {
+    test: 'bool',
+    handler: function handler(originValue) {
+        return !!originValue;
+    }
+};
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+module.exports = {
+    test: 'string',
+    handler: function handler(originValue) {
+        return originValue + '';
+    }
+};
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var logger = __webpack_require__(0);
+
+module.exports = {
+    test: /^sum!/,
+    handler: function handler(originValue, operator) {
+        var field = operator.split('!')[1];
+        var sum = 0;
+
+        if (!field) {
+            logger.error(operator + ' is not a valid operator.');
+            return sum;
+        }
+
+        if (!originValue || !(originValue instanceof Array)) {
+            logger.error(JSON.stringify(originValue) + ' is not a valid target for operator ' + operator + '.');
+            return sum;
+        }
+
+        originValue.forEach(function (item) {
+            sum += item[field];
+        });
+
+        return sum;
+    }
+};
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+var logger = __webpack_require__(0);
+
+module.exports = {
+        test: /^average!/,
+        handler: function handler(originValue, operator) {
+                var field = operator.split('!')[1];
+
+                var sum = 0;
+                var count = 0;
+
+                if (!field) {
+                        logger.error(operator + ' is not a valid operator.');
+                        return sum;
+                }
+
+                if (!originValue || !(originValue instanceof Array)) {
+                        logger.error(JSON.stringify(originValue) + ' is not a valid target for operator ' + operator + '.');
+                        return sum;
+                }
+
+                originValue.forEach(function (item) {
+                        sum += item[field];count += 1;
+                });
+
+                return sum / count;
+        }
+};
+
+/***/ })
+/******/ ]);
+});

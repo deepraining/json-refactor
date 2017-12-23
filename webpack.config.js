@@ -10,7 +10,7 @@ module.exports = {
   output: {
     path: __dirname + '/dist',
     filename: 'json-refactor.js',
-    library: 'json-refactor',
+    library: 'jsonRefactor',
     libraryTarget: "umd"
   },
   module: {

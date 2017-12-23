@@ -1,12 +1,17 @@
-/**
- * Created by senntyou on 2016/11/22.
- */
-function returnIfSuccess(number) {
-    return number == 1;
-}
-function double(number) {
-    return number * 2;
-}
+
+jsonRefactor.register({
+    test: 'returnIfSuccess',
+    handler: (originValue) => {
+        return originValue === 1;
+    }
+});
+
+jsonRefactor.register({
+    test: 'double',
+    handler: (originValue) => {
+        return originValue * 2;
+    }
+});
 
 var a = [
         {
@@ -74,7 +79,8 @@ var a = [
                     j: 12
                 }
             },
-            w: {w: {w: {w: {w: {w: null}}}}}
+            w: {w: {w: {w: {w: {w: null}}}}},
+            ww: '1.1'
         },
         {
             a: {
@@ -141,35 +147,40 @@ var a = [
                     j: 0
                 }
             },
-            w: {w: {w: {w: {w: {w: '六级'}}}}}
+            w: {w: {w: {w: {w: {w: 'hello'}}}}},
+            ww: '1.1'
         }
     ],
     b = [{
-        aa: "a^",
-        bb: "b^",
-        cc: "c!int^",
-        dd: "d!float^",
-        //对更改之后的bb属性进行操作
+        aa: "a",
+        bb: "b",
         _bb: {
-            aaaa: "a!string",
-            bbbb: "b!bool",
+            aaaa: "a|string",
+            bbbb: "b|bool",
             c:[{
                 hhhh: "h",
-                iiii: "i!int",
-                jjjj: "j!string",
-                kkkkk: "k!bool"
+                iiii: "i|int",
+                jjjj: "j|string",
+                kkkkk: "k|bool"
             }]
         },
-        ff: "aa.aa.aaa.aaaa!int",
-        ee1: "e[]|a|sum||round",
-        ee2: "e[]|b|concat| |toUpperCase",
-        gg1: "g.g.g[]|a|sum||round",
-        gg2: "g.g.g[]|b|concat| |toUpperCase",
-        hh: "h!returnIfSuccess",
-        ii: "i.i.i!double",
+        cc: "c|int",
+        dd: "d|float",
+        ff: "aa.aa.aaa.aaaa|int",
+        ee1: "e|sum!a",
+        gg1: "g.g.g|average!a",
+        hh: "h|returnIfSuccess",
+        ii: "i.i.i|double",
+        iii: 'i',
+        _iii: {
+            iii: 'i',
+            _iii: {
+                iii: 'i'
+            }
+        },
         j: {
             j: {
-                j: "j!bool"
+                j: "j|bool"
             }
         },
         zzzz: 'zzz',
@@ -181,6 +192,7 @@ var a = [
                 xx: 'xxxx'
             }
         ],
-        www: 'w.w.w.w.w.w'
+        www: 'w.w.w.w.w.w',
+        ww: 'ww|int|returnIfSuccess'
     }];
-console.log(JSON.refactor(a, b));
+console.log(jsonRefactor(a, b));
