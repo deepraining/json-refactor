@@ -243,7 +243,7 @@ keysMap:
 
 ```
 {
-    newKey: 'oldKey|sum!a'
+    newKey: 'oldKey|average!a'
 }
 ```
 
