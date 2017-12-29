@@ -1,6 +1,6 @@
 {
   "name": "json-refactor",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Refactor JSON object structure based on provided rules.",
   "homepage": "https://github.com/senntyou/json-refactor",
   "author": "senntyou",

@@ -1,12 +1,12 @@
 
-jsonRefactor.register({
+JSONRefactor.register({
     test: 'returnIfSuccess',
     handler: (originValue) => {
         return originValue === 1;
     }
 });
 
-jsonRefactor.register({
+JSONRefactor.register({
     test: 'double',
     handler: (originValue) => {
         return originValue * 2;
@@ -195,4 +195,4 @@ var a = [
         www: 'w.w.w.w.w.w',
         ww: 'ww|int|returnIfSuccess'
     }];
-console.log(jsonRefactor(a, b));
+console.log(JSONRefactor(a, b));

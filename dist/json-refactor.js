@@ -1,12 +1,12 @@
 /*!
  * 
- *     json-refactor v0.1.1
+ *     json-refactor v0.1.2
  * 
  *     https://github.com/senntyou/json-refactor
  * 
  *     @senntyou <jiangjinbelief@163.com>
  * 
- *     2017-12-23 16:14:55
+ *     2017-12-29 20:14:52
  *     
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -15,9 +15,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["jsonRefactor"] = factory();
+		exports["JSONRefactor"] = factory();
 	else
-		root["jsonRefactor"] = factory();
+		root["JSONRefactor"] = factory();
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

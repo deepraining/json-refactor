@@ -17,7 +17,7 @@ or
 ## how to use
 
 ```
-var newJson = jsonRefactor(target, keysMap, returnNew);
+var newJson = JSONRefactor(target, keysMap, returnNew);
 // or
 var newJson = JSON.refactor(target, keysMap, returnNew);
 ```
@@ -132,12 +132,12 @@ result:
 
 ## api
 
-### jsonRefactor.set
+### JSONRefactor.set
 
 set the default config values
 
 ```
-jsonRefactor.set({
+JSONRefactor.set({
     keepOnHandling: '_',
     operatorDelimiter: '|'
 });
@@ -149,17 +149,17 @@ jsonRefactor.set({
 * `operatorDelimiter`: delimiter of operators
     - `default`: `'|'`
 
-### jsonRefactor.register
+### JSONRefactor.register
 
 register a operation
 
 ```
 // register a operator
-jsonRefactor.register(test, handler);
-jsonRefactor.register({test: 'test', handler: function(originValue, operator){}});
+JSONRefactor.register(test, handler);
+JSONRefactor.register({test: 'test', handler: function(originValue, operator){}});
 
 // register multi operators
-jsonRefactor.register([{...}, {...}, ...]);
+JSONRefactor.register([{...}, {...}, ...]);
 ```
 
 * `test`: to confirm if a operator is match current operation
