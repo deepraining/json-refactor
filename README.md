@@ -155,7 +155,7 @@ register a operation
 
 ```
 // register a operator
-JSONRefactor.register(test, handler);
+JSONRefactor.register(test, handler); // this mode only for `test` is string
 JSONRefactor.register({test: 'test', handler: function(originValue, operator){}});
 
 // register multi operators
