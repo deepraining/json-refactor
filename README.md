@@ -18,8 +18,6 @@ or
 
 ```
 var newJson = JSONRefactor(target, keysMap, returnNew);
-// or
-var newJson = JSON.refactor(target, keysMap, returnNew);
 ```
 
 * `target`: Target object

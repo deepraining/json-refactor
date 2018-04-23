@@ -1,12 +1,12 @@
 /*!
  * 
- *     json-refactor v0.1.2
+ *     json-refactor v0.1.3
  * 
  *     https://github.com/senntyou/json-refactor
  * 
  *     @senntyou <jiangjinbelief@163.com>
  * 
- *     2017-12-29 20:14:52
+ *     2018-04-23 18:24:34
  *     
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -319,8 +319,6 @@ register(__webpack_require__(19));
 refactor.set = set;
 refactor.register = register;
 
-JSON.refactor = refactor;
-
 module.exports = refactor;
 
 /***/ }),
@@ -345,13 +343,13 @@ var handle = __webpack_require__(7);
  */
 module.exports = function (target, keysMap, returnNew) {
 
-    if (!check(target, keysMap)) return target;
+  if (!check(target, keysMap)) return target;
 
-    var newTarget = returnNew ? clone(target) : target;
+  var newTarget = returnNew ? clone(target) : target;
 
-    handle(newTarget, keysMap);
+  handle(newTarget, keysMap);
 
-    return newTarget;
+  return newTarget;
 };
 
 /***/ }),
@@ -776,29 +774,29 @@ module.exports = {
 var logger = __webpack_require__(0);
 
 module.exports = {
-        test: /^average!/,
-        handler: function handler(originValue, operator) {
-                var field = operator.split('!')[1];
+    test: /^average!/,
+    handler: function handler(originValue, operator) {
+        var field = operator.split('!')[1];
 
-                var sum = 0;
-                var count = 0;
+        var sum = 0;
+        var count = 0;
 
-                if (!field) {
-                        logger.error(operator + ' is not a valid operator.');
-                        return sum;
-                }
-
-                if (!originValue || !(originValue instanceof Array)) {
-                        logger.error(JSON.stringify(originValue) + ' is not a valid target for operator ' + operator + '.');
-                        return sum;
-                }
-
-                originValue.forEach(function (item) {
-                        sum += item[field];count += 1;
-                });
-
-                return sum / count;
+        if (!field) {
+            logger.error(operator + ' is not a valid operator.');
+            return sum;
         }
+
+        if (!originValue || !(originValue instanceof Array)) {
+            logger.error(JSON.stringify(originValue) + ' is not a valid target for operator ' + operator + '.');
+            return sum;
+        }
+
+        originValue.forEach(function (item) {
+            sum += item[field];count += 1;
+        });
+
+        return sum / count;
+    }
 };
 
 /***/ })

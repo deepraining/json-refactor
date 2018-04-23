@@ -16,6 +16,4 @@ register(require('./operation/average'));
 refactor.set = set;
 refactor.register = register;
 
-JSON.refactor = refactor;
-
 module.exports = refactor;
