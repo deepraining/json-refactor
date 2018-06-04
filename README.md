@@ -158,7 +158,7 @@ Register a operation.
 ```
 // register a operator
 JSONRefactor.register(test, handler);
-JSONRefactor.register({test: 'test', handler: function(originValue, operator){}});
+JSONRefactor.register({test, handler: function(originValue, operator){}});
 
 // register multiple operators
 JSONRefactor.register([{...}, {...}, ...]);
@@ -166,7 +166,7 @@ JSONRefactor.register([{...}, {...}, ...]);
 
 * `test`: To confirm if a operator is matching current operation.
     - `type`: `string/RegExp`
-    - `example`: `int`, `float`, `bool`, `string`
+    - `example`: `int`, `float`, `bool`, `string`, `/^slice!0!10/`
 
 * `handler`: Handle the original value and return a new value.
     - `type`: `function`
