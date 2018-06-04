@@ -17,16 +17,20 @@ or
 ## how to use
 
 ```
-var newJson = JSONRefactor(target, keysMap, returnNew);
+const JSONRefactor = require('json-refactor');
+
+let newJson = JSONRefactor(target, keysMap, returnNew);
 ```
 
-* `target`: Target object
-* `keysMap`: Keys map to refactor
-* `returnNew`: Whether return new json, if true, a new clone target will be return, and the origin target will not be modified 
+* `target`: Target to be refactored.
+* `keysMap`: Rules to refactor.
+* `returnNew`: Whether return new json. If true, a new cloned target will be returned, and the original target will not be modified.
 
-## keysMap
+## keysMap(rules)
 
-the `to key` to `from key` hash map.
+The `to key` to `from key` hash map.
+
+### Base use.
 
 target: 
 
@@ -46,7 +50,7 @@ result:
 {aaa: 1, bbb: 2}
 ```
 
-### keysMap should have the same structure with target json object, includes array
+### KeysMap should have the same structure with target json object, includes array.
 
 target: 
 
@@ -66,7 +70,7 @@ result:
 [{aaa: 1, bbb: 2}, {aaa: 3, bbb: 4}, {aaa: 5, bbb: 6}]
 ```
 
-### support `.` semantics
+### Support `.` semantics.
 
 target: 
 
@@ -86,7 +90,7 @@ result:
 {aaa: 1}
 ```
 
-### make a new key, and keep on refactoring the new key.
+### Make a new key, and keep on refactoring the new key.
 
 target: 
 
@@ -106,9 +110,9 @@ result:
 {aaa: {aaa: {aaa: 1}}}
 ```
 
-### make a handling to origin value
+### Make a handling to original value.
 
-use `|` to concat `from key` and `operator`, and you can add  multiple operators.
+Use `|` to concat `from key` and `operator`, and you can add multiple operators.
 
 target: 
 
@@ -132,7 +136,7 @@ result:
 
 ### JSONRefactor.set
 
-set the default config values
+Set the default config values.
 
 ```
 JSONRefactor.set({
@@ -141,57 +145,57 @@ JSONRefactor.set({
 });
 ```
 
-* `keepOnHandling`: make a new key, and keep on refactoring the new key
+* `keepOnHandling`: Make a new key, and keep on refactoring the new key.
     - `default`: `'_'`
 
-* `operatorDelimiter`: delimiter of operators
+* `operatorDelimiter`: Delimiter of operators.
     - `default`: `'|'`
 
 ### JSONRefactor.register
 
-register a operation
+Register a operation.
 
 ```
 // register a operator
-JSONRefactor.register(test, handler); // this mode only for `test` is string
+JSONRefactor.register(test, handler);
 JSONRefactor.register({test: 'test', handler: function(originValue, operator){}});
 
-// register multi operators
+// register multiple operators
 JSONRefactor.register([{...}, {...}, ...]);
 ```
 
-* `test`: to confirm if a operator is match current operation
+* `test`: To confirm if a operator is matching current operation.
     - `type`: `string/RegExp`
     - `example`: `int`, `float`, `bool`, `string`
 
-* `handler`: handle the origin value and return a new value.
+* `handler`: Handle the original value and return a new value.
     - `type`: `function`
     - `parameters`: `(originValue, operator)`
-        - `originValue`: origin value of current key mapped
-        - `operator`: operator matched
-    - `note`: must return a new value, or current key has no value to mapping
+        - `originValue`: Original value which current key mapped.
+        - `operator`: Operator matched.
+    - `note`: Must return a new value, or current key has no value to mapping.
     
-## built in operator
+## Built in operator
 
 ### int
 
-get a integer value
+Get a integer value.
 
 ### float
 
-get a float value
+Get a float value.
 
 ### bool
 
-get a bool value
+Get a bool value.
 
 ### string
 
-get a string value
+Get a string value.
 
 ### sum
 
-sum value specified by a key of every element, within an array.
+Sum value specified by a key of each element, within an array.
  
 format: `sum!key`
 
@@ -223,7 +227,7 @@ result:
 
 ### average
 
-get an average value specified by a key of every element, within an array.
+Get an average value specified by a key of each element, within an array.
  
 format: `average!key`
 

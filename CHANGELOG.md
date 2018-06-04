@@ -1,12 +1,16 @@
-# json-refactor changelog
+# Changelog
+
+## 0.1.4
+
+- Fix bug of `register(RegExp, Handler)`
 
 ## 0.1.3
 
-- remove `JSON.refactor`
+- Remove `JSON.refactor`
 
 ## 0.1.2
 
-- set global export name `JSONRefactor`
+- Set global export name `JSONRefactor`
 
 ## 0.1.1
 

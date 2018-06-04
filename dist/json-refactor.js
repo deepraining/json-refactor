@@ -1,12 +1,12 @@
 /*!
  * 
- *     json-refactor v0.1.3
+ *     json-refactor v0.1.4
  * 
  *     https://github.com/senntyou/json-refactor
  * 
  *     @senntyou <jiangjinbelief@163.com>
  * 
- *     2018-05-19 11:34:33
+ *     2018-06-04 09:34:35
  *     
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -656,17 +656,17 @@ var operations = __webpack_require__(4);
 module.exports = function (test, handler) {
     if (!test) return;
 
-    // map or array
-    if ((typeof test === 'undefined' ? 'undefined' : _typeof(test)) == 'object') {
-        // array
-        if (test instanceof Array) test.forEach(function (item) {
-            operations.push(item);
-        });
-        // map
-        else operations.push(test);
-    }
     // string/regExp + handler
-    else operations.push({ test: test, handler: handler });
+    if (test && handler) operations.push({ test: test, handler: handler });
+    // map or array
+    else if ((typeof test === 'undefined' ? 'undefined' : _typeof(test)) === 'object') {
+            // array
+            if (test instanceof Array) test.forEach(function (item) {
+                operations.push(item);
+            });
+            // map
+            else operations.push(test);
+        }
 };
 
 /***/ }),

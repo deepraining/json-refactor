@@ -12,13 +12,13 @@ var operations = require('./operations');
 module.exports = (test, handler) => {
     if (!test) return;
 
+    // string/regExp + handler
+    if (test && handler) operations.push({test: test, handler: handler});
     // map or array
-    if (typeof test == 'object') {
+    else if (typeof test === 'object') {
         // array
         if (test instanceof Array) test.forEach((item) => {operations.push(item)});
         // map
         else operations.push(test);
     }
-    // string/regExp + handler
-    else operations.push({test: test, handler: handler});
 };
