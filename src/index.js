@@ -1,16 +1,22 @@
-const refactor = require('./refactor');
-const set = require('./set');
-const register = require('./register');
+import refactor from './refactor';
+import set from './set';
+import register from './register';
+import intOperator from './operator/int';
+import floatOperator from './operator/float';
+import boolOperator from './operator/bool';
+import stringOperator from './operator/string';
+import sumOperator from './operator/sum';
+import averageOperator from './operator/average';
 
 // built in operations
-register(require('./operation/int'));
-register(require('./operation/float'));
-register(require('./operation/bool'));
-register(require('./operation/string'));
-register(require('./operation/sum'));
-register(require('./operation/average'));
+register(intOperator);
+register(floatOperator);
+register(boolOperator);
+register(stringOperator);
+register(sumOperator);
+register(averageOperator);
 
 refactor.set = set;
 refactor.register = register;
 
-module.exports = refactor;
+export default refactor;

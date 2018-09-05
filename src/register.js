@@ -1,12 +1,12 @@
-const operations = require('./operations');
+import operations from './operations';
 
 /**
- * register a operation
+ * register an operation
  *
  * @param test
  * @param handler
  */
-module.exports = (test, handler) => {
+export default function(test, handler) {
   if (!test) return;
 
   // string/regExp + handler
@@ -14,11 +14,8 @@ module.exports = (test, handler) => {
   // map or array
   else if (typeof test === 'object') {
     // array
-    if (test instanceof Array)
-      test.forEach(item => {
-        operations.push(item);
-      });
+    if (test instanceof Array) operations.push(...test);
     // map
     else operations.push(test);
   }
-};
+}

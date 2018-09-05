@@ -1,4 +1,4 @@
-const clone = require('./util/clone');
+const clone = require('clone');
 const check = require('./util/check');
 const handle = require('./handle');
 

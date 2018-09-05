@@ -1,14 +1,14 @@
-const marker = require('./marker');
+import marker from './marker';
 
 /**
  * set custom markers
  *
  * @param option
  */
-module.exports = option => {
+export default function(option) {
   if (!option || typeof option !== 'object') return;
 
-  for (const attr in option) {
-    if (option.hasOwnProperty(attr)) marker[attr] = option[attr]; // eslint-disable-line no-prototype-builtins
-  }
-};
+  Object.keys(option).forEach(key => {
+    marker[key] = option[key];
+  });
+}

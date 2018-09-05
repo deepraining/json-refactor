@@ -1,4 +1,4 @@
-const clone = require('../util/clone');
+const clone = require('clone');
 
 module.exports = (target, fromKey) => {
   // [key, subKey, subSubKey]

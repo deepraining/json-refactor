@@ -1,27 +1,25 @@
-const logger = require('./logger');
+import { error } from './logger';
+import type from './type';
 
-module.exports = (target, keysMap) => {
+export default function(target, keysMap) {
   if (!target || typeof target !== 'object') {
-    logger.error('target is invalid, it should be a map or an array');
-    logger.error(`target: ${JSON.stringify(target)}`);
+    error('target is invalid, it should be a map or an array');
+    error('target: ', target);
     return !1;
   }
 
   if (!keysMap || typeof keysMap !== 'object') {
-    logger.error('keysMap is invalid, it should be a map or an array');
-    logger.error(`keysMap: ${JSON.stringify(keysMap)}`);
+    error('keysMap is invalid, it should be a map or an array');
+    error('keysMap: ', keysMap);
     return !1;
   }
 
-  if (
-    (target instanceof Array && !(keysMap instanceof Array)) ||
-    (keysMap instanceof Array && !(target instanceof Array))
-  ) {
-    logger.error('target and keysMap are not the same type, they both should be Array or Object[map]');
-    logger.error(`target: ${JSON.stringify(target)}`);
-    logger.error(`keysMap: ${JSON.stringify(keysMap)}`);
+  if (type(target) !== type(keysMap)) {
+    error('target and keysMap are not the same type, they both should be map or array');
+    error('target: ', target);
+    error('keysMap: ', keysMap);
     return !1;
   }
 
   return !0;
-};
+}

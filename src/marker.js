@@ -1,34 +1,24 @@
-module.exports = {
+export default {
   /**
-   * make a new key, and keep on refactoring the new key
+   * Make a new key, and keep on refactoring the new key.
    *
-   * example:
-   *     target: {
-   *         list: [
-   *             {
-   *                 id: id,
-   *                 name: name
-   *             }
-   *         ]
-   *     }
-   *     keysMap: {
-   *         data: 'list',
-   *         _data: [
-   *             {
-   *                 newId: 'id',
-   *                 newName: 'name'
-   *             }
-   *         ]
-   *     }
+   * @example
+   *
+   * ```
+   * target: {list: [{}]}
+   *
+   * keysMap: {data: 'list', _data: [{}]}
+   * ```
    */
   keepOnHandling: '_',
   /**
-   * delimiter of operators
+   * Delimiter of operators.
    *
-   * example:
-   *     keysMap: {
-   *         toKey: 'fromKey|operator1|operator2|operator3'
-   *     }
+   * @example
+   *
+   * ```
+   * keysMap: {toKey: 'fromKey|operator1|operator2|operator3'}
+   * ```
    */
   operatorDelimiter: '|',
 };

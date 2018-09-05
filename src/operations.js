@@ -3,7 +3,7 @@
  *
  * @type {Array}
  */
-module.exports = [
+export default [
   /**
    * {
    *     test: string/RegExp
