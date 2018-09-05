@@ -1,6 +1,3 @@
-
-'use strict';
-
 /**
  * common convert
  *
@@ -9,5 +6,5 @@
  * @returns {*}
  */
 module.exports = (target, fromKey) => {
-    return target[fromKey];
+  return target[fromKey];
 };

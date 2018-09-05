@@ -1,7 +1,4 @@
-
-'use strict';
-
-var operations = require('./operations');
+const operations = require('./operations');
 
 /**
  * register a operation
@@ -10,15 +7,18 @@ var operations = require('./operations');
  * @param handler
  */
 module.exports = (test, handler) => {
-    if (!test) return;
+  if (!test) return;
 
-    // string/regExp + handler
-    if (test && handler) operations.push({test: test, handler: handler});
-    // map or array
-    else if (typeof test === 'object') {
-        // array
-        if (test instanceof Array) test.forEach((item) => {operations.push(item)});
-        // map
-        else operations.push(test);
-    }
+  // string/regExp + handler
+  if (test && handler) operations.push({ test, handler });
+  // map or array
+  else if (typeof test === 'object') {
+    // array
+    if (test instanceof Array)
+      test.forEach(item => {
+        operations.push(item);
+      });
+    // map
+    else operations.push(test);
+  }
 };

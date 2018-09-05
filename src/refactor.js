@@ -1,10 +1,6 @@
-
-'use strict';
-
-var logger = require('./util/logger');
-var clone = require('./util/clone');
-var check = require('./util/check');
-var handle = require('./handle');
+const clone = require('./util/clone');
+const check = require('./util/check');
+const handle = require('./handle');
 
 /**
  * main
@@ -14,12 +10,11 @@ var handle = require('./handle');
  * @param returnNew Whether return new json, if true, a new clone target will be return, and the origin target will be not be modified
  */
 module.exports = (target, keysMap, returnNew) => {
+  if (!check(target, keysMap)) return target;
 
-    if (!check(target, keysMap)) return target;
+  const newTarget = returnNew ? clone(target) : target;
 
-    var newTarget = returnNew ? clone(target) : target;
+  handle(newTarget, keysMap);
 
-    handle(newTarget, keysMap);
-
-    return newTarget;
+  return newTarget;
 };

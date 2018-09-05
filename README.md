@@ -30,105 +30,45 @@ The `to key` to `from key` hash map.
 
 ### 1. Base use.
 
-`target`:
+`target`: `{a: 1, b: 2}`
 
-```
-{a: 1, b: 2}
-```
+`keysMap`: `{aaa: 'a', bbb: 'b'}`
 
-`keysMap`:
-
-```
-{aaa: 'a', bbb: 'b'}
-```
-
-`result`:
-
-```
-{aaa: 1, bbb: 2}
-```
+`result`: `{aaa: 1, bbb: 2}`
 
 ### 2. `keysMap` should have the same structure with target json object, including array.
 
-`target`:
+`target`: `[{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]`
 
-```
-[{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]
-```
+`keysMap`: `[{aaa: 'a', bbb: 'b'}]`
 
-`keysMap`:
-
-```
-[{aaa: 'a', bbb: 'b'}]
-```
-
-`result`:
-
-```
-[{aaa: 1, bbb: 2}, {aaa: 3, bbb: 4}, {aaa: 5, bbb: 6}]
-```
+`result`: `[{aaa: 1, bbb: 2}, {aaa: 3, bbb: 4}, {aaa: 5, bbb: 6}]`
 
 ### 3. Support `.` semantics.
 
-`target`:
+`target`: `{a: {a: {a: 1}}}`
 
-```
-{a: {a: {a: 1}}}
-```
+`keysMap`: `{aaa: 'a.a.a'}`
 
-`keysMap`:
-
-```
-{aaa: 'a.a.a'}
-```
-
-`result`:
-
-```
-{aaa: 1}
-```
+`result`: `{aaa: 1}`
 
 ### 4. Make a new key, and keep on formatting the new key.
 
-`target`:
+`target`: `{a: {a: {a: 1}}}`
 
-```
-{a: {a: {a: 1}}}
-```
+`keysMap`: `{aaa: 'a', _aaa: {aaa: 'a', _aaa: {aaa: 'a'}}}`
 
-`keysMap`:
-
-```
-{aaa: 'a', _aaa: {aaa: 'a', _aaa: {aaa: 'a'}}}
-```
-
-`result`:
-
-```
-{aaa: {aaa: {aaa: 1}}}
-```
+`result`: `{aaa: {aaa: {aaa: 1}}}`
 
 ### 5. Make an operator to original value.
 
 Use `|` to concat `from key` and `operator`, and you can add multiple operators.
 
-`target`:
+`target`: `{a: 1, b: '234', c: '1.22', d: '0.01'}`
 
-```
-{a: 1, b: '234', c: '1.22', d: '0.01'}
-```
+`keysMap`: `{aaa: 'a|bool', bbb: 'b|int', ccc: 'c|float', ddd: 'd|int|bool'}`
 
-`keysMap`:
-
-```
-{aaa: 'a|bool', bbb: 'b|int', ccc: 'c|float', ddd: 'd|int|bool'}
-```
-
-`result`:
-
-```
-{aaa: true, bbb: 234, ccc: 1.22, ddd: false}
-```
+`result`: `{aaa: true, bbb: 234, ccc: 1.22, ddd: false}`
 
 ## api
 
@@ -138,8 +78,8 @@ Set the default config values.
 
 ```
 JSONRefactor.set({
-    keepOnHandling: '_',
-    operatorDelimiter: '|'
+  keepOnHandling: '_',
+  operatorDelimiter: '|'
 });
 ```
 
@@ -180,78 +120,42 @@ JSONRefactor.register([{test1, handler1}, {test2, handler2}, ...]);
 
 ## Built-in operators.
 
-### `int`
+### 1. `int`
 
 Get an integer value.
 
-### `float`
+### 2. `float`
 
 Get a float value.
 
-### `bool`
+### 3. `bool`
 
 Get a bool value.
 
-### `string`
+### 4. `string`
 
 Get a string value.
 
-### `sum`
+### 5. `sum`
 
 Get a sum value specified by a key of each element, within an array.
 
 `format`: `sum!key`
 
-`target`:
+`target`: `{oldKey: [{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]}`
 
-```
-{
-    oldKey: [{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]
-}
-```
+`keysMap`: `{newKey: 'oldKey|sum!a'}`
 
-`keysMap`:
+`result`: `{newKey: 9}`
 
-```
-{
-    newKey: 'oldKey|sum!a'
-}
-```
-
-`result`:
-
-```
-{
-    newKey: 9
-}
-```
-
-### `average`
+### 6. `average`
 
 Get an average value specified by a key of each element, within an array.
 
 `format`: `average!key`
 
-`target`:
+`target`: `{oldKey: [{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]}`
 
-```
-{
-    oldKey: [{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]
-}
-```
+`keysMap`: `{newKey: 'oldKey|average!a'}`
 
-`keysMap`:
-
-```
-{
-    newKey: 'oldKey|average!a'
-}
-```
-
-`result`:
-
-```
-{
-    newKey: 3
-}
-```
+`result`: `{newKey: 3}`

@@ -1,9 +1,6 @@
-
-'use strict';
-
-var refactor = require('./refactor');
-var set = require('./set');
-var register = require('./register');
+const refactor = require('./refactor');
+const set = require('./set');
+const register = require('./register');
 
 // built in operations
 register(require('./operation/int'));

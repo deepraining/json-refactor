@@ -1,9 +1,6 @@
-
-'use strict';
-
 module.exports = {
-    test: 'int',
-    handler: (originValue) => {
-        return parseInt(originValue);
-    }
+  test: 'int',
+  handler: originValue => {
+    return parseInt(originValue, 10);
+  },
 };
