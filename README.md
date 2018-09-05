@@ -2,131 +2,129 @@
 
 Refactor JSON object structure based on provided rules.
 
-## quick start
+## Quick start.
 
 ```
-npm install json-refactor
-```
+npm install json-refactor --save
 
-or 
-
-```
-<script src="path/to/json-refactor"></script>
-```
-
-## how to use
-
-```
 const JSONRefactor = require('json-refactor');
-
-let newJson = JSONRefactor(target, keysMap, returnNew);
 ```
 
-* `target`: Target to be refactored.
-* `keysMap`: Rules to refactor.
-* `returnNew`: Whether return new json. If true, a new cloned target will be returned, and the original target will not be modified.
+## How to use.
 
-## keysMap(rules)
+```
+// Refactor original target.
+JSONRefactor(target, keysMap);
+
+// Return a new refactored clone target.
+const newJson = JSONRefactor(target, keysMap, true);
+```
+
+- `target`: Target to be refactored.
+- `keysMap`: Rules to refactor.
+- `returnNew`: Whether to return new json. If `true`, a new cloned target will be returned, and the original target will not be modified. Default `false`, the original target will be refactored.
+
+## `keysMap` (rules)
 
 The `to key` to `from key` hash map.
 
-### Base use.
+### 1. Base use.
 
-target: 
+`target`:
 
 ```
 {a: 1, b: 2}
 ```
 
-keysMap: 
+`keysMap`:
 
 ```
 {aaa: 'a', bbb: 'b'}
 ```
 
-result: 
+`result`:
 
 ```
 {aaa: 1, bbb: 2}
 ```
 
-### KeysMap should have the same structure with target json object, includes array.
+### 2. `keysMap` should have the same structure with target json object, including array.
 
-target: 
+`target`:
 
 ```
 [{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]
 ```
 
-keysMap: 
+`keysMap`:
 
 ```
 [{aaa: 'a', bbb: 'b'}]
 ```
 
-result:
- 
+`result`:
+
 ```
 [{aaa: 1, bbb: 2}, {aaa: 3, bbb: 4}, {aaa: 5, bbb: 6}]
 ```
 
-### Support `.` semantics.
+### 3. Support `.` semantics.
 
-target: 
+`target`:
 
 ```
 {a: {a: {a: 1}}}
 ```
 
-keysMap: 
+`keysMap`:
 
 ```
 {aaa: 'a.a.a'}
 ```
 
-result: 
+`result`:
 
 ```
 {aaa: 1}
 ```
 
-### Make a new key, and keep on refactoring the new key.
+### 4. Make a new key, and keep on formatting the new key.
 
-target: 
+`target`:
 
 ```
 {a: {a: {a: 1}}}
 ```
 
-keysMap: 
+`keysMap`:
 
 ```
 {aaa: 'a', _aaa: {aaa: 'a', _aaa: {aaa: 'a'}}}
 ```
 
-result: 
+`result`:
 
 ```
 {aaa: {aaa: {aaa: 1}}}
 ```
 
-### Make a handling to original value.
+### 5. Make an operator to original value.
 
 Use `|` to concat `from key` and `operator`, and you can add multiple operators.
 
-target: 
+`target`:
 
 ```
 {a: 1, b: '234', c: '1.22', d: '0.01'}
 ```
 
-keysMap: 
+`keysMap`:
 
 ```
 {aaa: 'a|bool', bbb: 'b|int', ccc: 'c|float', ddd: 'd|int|bool'}
 ```
 
-result: 
+`result`:
 
 ```
 {aaa: true, bbb: 234, ccc: 1.22, ddd: false}
@@ -145,63 +143,66 @@ JSONRefactor.set({
 });
 ```
 
-* `keepOnHandling`: Make a new key, and keep on refactoring the new key.
-    - `default`: `'_'`
+- `keepOnHandling`: Make a new key, and keep on formatting the new key.
 
-* `operatorDelimiter`: Delimiter of operators.
-    - `default`: `'|'`
+  - `type`: `string`
+  - `default`: `_`
+
+- `operatorDelimiter`: Delimiter of operators.
+  - `type`: `string`
+  - `default`: `|`
 
 ### JSONRefactor.register
 
-Register a operation.
+Register operators.
 
 ```
-// register a operator
+// register one operator
 JSONRefactor.register(test, handler);
-JSONRefactor.register({test, handler: function(originValue, operator){}});
+JSONRefactor.register({test, handler});
 
 // register multiple operators
-JSONRefactor.register([{...}, {...}, ...]);
+JSONRefactor.register([{test1, handler1}, {test2, handler2}, ...]);
 ```
 
-* `test`: To confirm if a operator is matching current operation.
-    - `type`: `string/RegExp`
-    - `example`: `int`, `float`, `bool`, `string`, `/^slice!0!10/`
+- `test`: To match the operator.
 
-* `handler`: Handle the original value and return a new value.
-    - `type`: `function`
-    - `parameters`: `(originValue, operator)`
-        - `originValue`: Original value which current key mapped.
-        - `operator`: Operator matched.
-    - `note`: Must return a new value, or current key has no value to mapping.
-    
-## Built in operator
+  - `type`: `string/RegExp`
+  - `example`: `int`, `float`, `bool`, `string`, `/^slice!0!10/`
 
-### int
+- `handler`: Handle the original value and return a new value.
+  - `type`: `function`
+  - `example`: `(originValue, operator) => { ... return a new value }`
+  - `parameters`: `originValue, operator`
+    - `originValue`: Original value to be handled.
+    - `operator`: Operator matched.
+  - `note`: It should return a new value.
 
-Get a integer value.
+## Built-in operators.
 
-### float
+### `int`
+
+Get an integer value.
+
+### `float`
 
 Get a float value.
 
-### bool
+### `bool`
 
 Get a bool value.
 
-### string
+### `string`
 
 Get a string value.
 
-### sum
+### `sum`
 
-Sum value specified by a key of each element, within an array.
- 
-format: `sum!key`
+Get a sum value specified by a key of each element, within an array.
 
-example: 
+`format`: `sum!key`
 
-target: 
+`target`:
 
 ```
 {
@@ -209,7 +210,7 @@ target:
 }
 ```
 
-keysMap: 
+`keysMap`:
 
 ```
 {
@@ -217,23 +218,21 @@ keysMap:
 }
 ```
 
-result:
- 
+`result`:
+
 ```
 {
     newKey: 9
 }
 ```
 
-### average
+### `average`
 
 Get an average value specified by a key of each element, within an array.
- 
-format: `average!key`
 
-example: 
+`format`: `average!key`
 
-target: 
+`target`:
 
 ```
 {
@@ -241,7 +240,7 @@ target:
 }
 ```
 
-keysMap: 
+`keysMap`:
 
 ```
 {
@@ -249,12 +248,10 @@ keysMap:
 }
 ```
 
-result:
- 
+`result`:
+
 ```
 {
     newKey: 3
 }
 ```
-
-## [demo code](./example)
