@@ -33,7 +33,7 @@
     "eslint:fix": "eslint . --fix",
     "lint-staged": "lint-staged",
     "test": "jest",
-    "test:array": "jest test/array.test.js",
+    "test:dot": "jest test/dot.test.js",
     "cover": "npm run cover:init && npm run cover:all && npm run cover:report",
     "cover:init": "rimraf coverage",
     "cover:all": "jest --coverage",
