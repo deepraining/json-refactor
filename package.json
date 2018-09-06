@@ -1,6 +1,6 @@
 {
   "name": "json-refactor",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Refactor JSON object structure based on provided rules.",
   "homepage": "https://github.com/senntyou/json-refactor",
   "author": "senntyou",
@@ -11,6 +11,9 @@
     "rule",
     "structure"
   ],
+  "source": "src/index.js",
+  "module": "dist/json-refactor.es.js",
+  "umd:main": "dist/json-refactor.umd.js",
   "main": "dist/json-refactor.js",
   "files": [
     "dist"
@@ -22,6 +25,8 @@
     "url": "https://github.com/senntyou/json-refactor"
   },
   "scripts": {
+    "build": "microbundle --name JSONRefactor",
+    "dev": "microbundle watch",
     "precommit": "npm run lint-staged",
     "prettier": "prettier --write ./**/*.{js,json,md}",
     "eslint": "eslint .",
@@ -34,8 +39,8 @@
     "cover:report": "istanbul report"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
     "babel-eslint": "^8.2.5",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-babel": "^5.1.0",
@@ -47,6 +52,7 @@
     "istanbul": "^0.4.5",
     "jest": "^23.4.0",
     "lint-staged": "^7.2.0",
+    "microbundle": "^0.6.0",
     "prettier": "^1.13.7",
     "rimraf": "^2.6.2"
   },

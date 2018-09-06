@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0 [2018-09-06]
+
+- Use `microbundle` to build project.
+
 ## 0.1.4
 
 - Fix bug of `register(RegExp, Handler)`
