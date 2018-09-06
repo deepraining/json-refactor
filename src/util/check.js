@@ -15,7 +15,7 @@ export default function(target, mapping) {
   }
 
   if (type(target) !== type(mapping)) {
-    error('target and mapping rules are not the same type, they both should be map or array');
+    error('target and mapping rules are not the same type, they should both be map or array');
     error('target: ', target);
     error('mapping rules: ', mapping);
     return !1;
