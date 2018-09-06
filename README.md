@@ -13,18 +13,14 @@ const JSONRefactor = require('json-refactor');
 ## How to use.
 
 ```
-// Refactor original target.
-JSONRefactor(target, keysMap);
-
-// Return a new refactored clone target.
-const newJson = JSONRefactor(target, keysMap, true);
+const newTarget = JSONRefactor(target, mapping, cloneTarget);
 ```
 
 - `target`: Target to be refactored.
-- `keysMap`: Rules to refactor.
-- `returnNew`: Whether to return new json. If `true`, a new cloned target will be returned, and the original target will not be modified. Default `false`, the original target will be refactored.
+- `mapping`: Mapping rules to refactor.
+- `cloneTarget`: Whether to clone target, if `true`, a new cloned target will be formatted, and the original target will not be modified. Default `false`, the original target will be modified.
 
-## `keysMap` (rules)
+## `mapping` rules
 
 The `to key` to `from key` hash map.
 
@@ -32,23 +28,23 @@ The `to key` to `from key` hash map.
 
 `target`: `{a: 1, b: 2}`
 
-`keysMap`: `{aaa: 'a', bbb: 'b'}`
+`mapping`: `{aaa: 'a', bbb: 'b'}`
 
 `result`: `{aaa: 1, bbb: 2}`
 
-### 2. `keysMap` should have the same structure with target json object, including array.
+### 2. `mapping` should have the same structure with target json object, including array.
 
 `target`: `[{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]`
 
-`keysMap`: `[{aaa: 'a', bbb: 'b'}]`
+`mapping`: `[{aaa: 'a', bbb: 'b'}]`
 
 `result`: `[{aaa: 1, bbb: 2}, {aaa: 3, bbb: 4}, {aaa: 5, bbb: 6}]`
 
-### 3. Support `.` semantics.
+### 3. Support `.` semantic.
 
 `target`: `{a: {a: {a: 1}}}`
 
-`keysMap`: `{aaa: 'a.a.a'}`
+`mapping`: `{aaa: 'a.a.a'}`
 
 `result`: `{aaa: 1}`
 
@@ -56,7 +52,7 @@ The `to key` to `from key` hash map.
 
 `target`: `{a: {a: {a: 1}}}`
 
-`keysMap`: `{aaa: 'a', _aaa: {aaa: 'a', _aaa: {aaa: 'a'}}}`
+`mapping`: `{aaa: 'a', _aaa: {aaa: 'a', _aaa: {aaa: 'a'}}}`
 
 `result`: `{aaa: {aaa: {aaa: 1}}}`
 
@@ -66,7 +62,7 @@ Use `|` to concat `from key` and `operator`, and you can add multiple operators.
 
 `target`: `{a: 1, b: '234', c: '1.22', d: '0.01'}`
 
-`keysMap`: `{aaa: 'a|bool', bbb: 'b|int', ccc: 'c|float', ddd: 'd|int|bool'}`
+`mapping`: `{aaa: 'a|bool', bbb: 'b|int', ccc: 'c|float', ddd: 'd|int|bool'}`
 
 `result`: `{aaa: true, bbb: 234, ccc: 1.22, ddd: false}`
 
@@ -144,7 +140,7 @@ Get a sum value specified by a key of each element, within an array.
 
 `target`: `{oldKey: [{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]}`
 
-`keysMap`: `{newKey: 'oldKey|sum!a'}`
+`mapping`: `{newKey: 'oldKey|sum!a'}`
 
 `result`: `{newKey: 9}`
 
@@ -156,6 +152,6 @@ Get an average value specified by a key of each element, within an array.
 
 `target`: `{oldKey: [{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]}`
 
-`keysMap`: `{newKey: 'oldKey|average!a'}`
+`mapping`: `{newKey: 'oldKey|average!a'}`
 
 `result`: `{newKey: 3}`

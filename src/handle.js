@@ -7,19 +7,19 @@ import convert from './convert';
  * Handle function.
  *
  * @param target Target to handle.
- * @param keysMap Rules
+ * @param mapping Mapping rules.
  */
-const handle = (target, keysMap) => {
-  if (!check(target, keysMap)) return;
+const handle = (target, mapping) => {
+  if (!check(target, mapping)) return;
 
   // array
-  if (Array.isArray(keysMap))
+  if (Array.isArray(mapping))
     target.forEach(item => {
-      handle(item, keysMap[0]);
+      handle(item, mapping[0]);
     });
   // map
   else
-    Object.keys(keysMap).forEach(toKey => {
+    Object.keys(mapping).forEach(toKey => {
       /**
        * Just copy value of `fromKey` to `toKey`.
        *
@@ -29,7 +29,7 @@ const handle = (target, keysMap) => {
        * {toKey: fromKey}
        * ```
        */
-      const fromKey = keysMap[toKey];
+      const fromKey = mapping[toKey];
 
       let oldValue = target[toKey];
 
@@ -75,7 +75,7 @@ const handle = (target, keysMap) => {
          * ```
          */
 
-        convert(target, keysMap, toKey);
+        convert(target, mapping, toKey);
       } else {
         // Others.
 

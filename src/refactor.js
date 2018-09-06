@@ -6,15 +6,15 @@ import handle from './handle';
  * Main
  *
  * @param target Target to handle.
- * @param keysMap Keys map to refactor.
- * @param returnNew Whether return new json, if true, a new clone target will be return, and the original target will be not be modified.
+ * @param mapping Mapping rules to refactor.
+ * @param cloneTarget Whether to clone target, if `true`, a new cloned target will be formatted, and the original target will not be modified. Default `false`, the original target will be modified.
  */
-export default function(target, keysMap, returnNew) {
-  if (!check(target, keysMap)) return target;
+export default function(target, mapping, cloneTarget) {
+  if (!check(target, mapping)) return target;
 
-  const newTarget = returnNew ? clone(target) : target;
+  const newTarget = cloneTarget ? clone(target) : target;
 
-  handle(newTarget, keysMap);
+  handle(newTarget, mapping);
 
   return newTarget;
 }

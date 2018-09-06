@@ -7,7 +7,7 @@ export default {
    * ```
    * target: {list: [{}]}
    *
-   * keysMap: {data: 'list', _data: [{}]}
+   * mapping: {data: 'list', _data: [{}]}
    * ```
    */
   keepOnHandling: '_',
@@ -17,7 +17,7 @@ export default {
    * @example
    *
    * ```
-   * keysMap: {toKey: 'fromKey|operator1|operator2|operator3'}
+   * mapping: {toKey: 'fromKey|operator1|operator2|operator3'}
    * ```
    */
   operatorDelimiter: '|',

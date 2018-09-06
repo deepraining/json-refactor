@@ -4,17 +4,17 @@ import operations from '../operations';
 import dotConvert from './dot';
 
 /**
- * Convert target based on `keysMap` and `toKey`.
+ * Convert target based on `mapping` and `toKey`.
  *
  * @param target
- * @param keysMap
+ * @param mapping
  * @param toKey
  */
-export default function(target, keysMap, toKey) {
+export default function(target, mapping, toKey) {
   /* eslint-disable no-param-reassign */
 
   // `fromKey|operator1|operator2|operator3`
-  const fullFromKey = keysMap[toKey];
+  const fullFromKey = mapping[toKey];
 
   // [fromKey, operator1, operator2, operator3]
   const fullFromKeyItems = fullFromKey.split(marker.operatorDelimiter);
