@@ -1,14 +1,14 @@
 import marker from './marker';
 
 /**
- * set custom markers
+ * Set custom markers.
  *
- * @param option
+ * @param options
  */
-export default function(option) {
-  if (!option || typeof option !== 'object') return;
+export default function(options) {
+  if (!options || typeof options !== 'object') return;
 
-  Object.keys(option).forEach(key => {
-    marker[key] = option[key];
+  Object.keys(options).forEach(key => {
+    marker[key] = options[key];
   });
 }

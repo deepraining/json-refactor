@@ -1,44 +1,47 @@
-const marker = require('../marker');
-const type = require('../util/type');
-const operations = require('../operations');
-const commonConvert = require('./common');
-const dotConvert = require('./dot');
+import marker from '../marker';
+import type from '../util/type';
+import operations from '../operations';
+import dotConvert from './dot';
 
 /**
- * covert target based on keysMap and toKey
+ * Convert target based on `keysMap` and `toKey`.
  *
  * @param target
  * @param keysMap
  * @param toKey
  */
-module.exports = (target, keysMap, toKey) => {
+export default function(target, keysMap, toKey) {
   /* eslint-disable no-param-reassign */
 
-  // fromKey|operator1|operator2|operator3
-  const originFromKey = keysMap[toKey];
+  // `fromKey|operator1|operator2|operator3`
+  const fullFromKey = keysMap[toKey];
+
   // [fromKey, operator1, operator2, operator3]
-  const originFromKeyItems = originFromKey.split(marker.operatorDelimiter);
-  // real from key
-  const fromKey = originFromKeyItems.shift();
-  // all operators
-  const operators = originFromKeyItems;
+  const fullFromKeyItems = fullFromKey.split(marker.operatorDelimiter);
 
-  // has dot mark
+  // Real from key.
+  const fromKey = fullFromKeyItems.shift();
+
+  // All operators.
+  const operators = fullFromKeyItems;
+
+  // Has dot mark.
   if (fromKey.indexOf('.') > -1) target[toKey] = dotConvert(target, fromKey);
-  // common
-  else target[toKey] = commonConvert(target, fromKey);
+  // Base.
+  else target[toKey] = target[fromKey];
 
-  // handle operators and operations
+  // Operators and operations.
   operators.forEach(operator => {
     operations.forEach(operation => {
-      // is string
       if (typeof operation.test === 'string') {
+        // string
+
         if (operator === operation.test) target[toKey] = operation.handler(target[toKey], operator);
-      }
-      // is RegExp
-      else if (type(operation.test) === 'regexp') {
+      } else if (type(operation.test) === 'regexp') {
+        // RegExp
+
         if (operation.test.test(operator)) target[toKey] = operation.handler(target[toKey], operator);
       }
     });
   });
-};
+}

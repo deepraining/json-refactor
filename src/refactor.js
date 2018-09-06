@@ -1,15 +1,15 @@
-const clone = require('clone');
-const check = require('./util/check');
-const handle = require('./handle');
+import clone from 'clone';
+import check from './util/check';
+import handle from './handle';
 
 /**
- * main
+ * Main
  *
- * @param target Target object
- * @param keysMap Keys map to refactor
- * @param returnNew Whether return new json, if true, a new clone target will be return, and the origin target will be not be modified
+ * @param target Target to handle.
+ * @param keysMap Keys map to refactor.
+ * @param returnNew Whether return new json, if true, a new clone target will be return, and the original target will be not be modified.
  */
-module.exports = (target, keysMap, returnNew) => {
+export default function(target, keysMap, returnNew) {
   if (!check(target, keysMap)) return target;
 
   const newTarget = returnNew ? clone(target) : target;
@@ -17,4 +17,4 @@ module.exports = (target, keysMap, returnNew) => {
   handle(newTarget, keysMap);
 
   return newTarget;
-};
+}

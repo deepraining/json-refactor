@@ -1,13 +1,13 @@
-const check = require('./util/check');
-const logger = require('./util/logger');
-const marker = require('./marker');
-const convert = require('./convert');
+import check from './util/check';
+import { error } from './util/logger';
+import marker from './marker';
+import convert from './convert';
 
 /**
- * handle
+ * Handle function.
  *
- * @param target Target to refactor
- * @param keysMap
+ * @param target Target to handle.
+ * @param keysMap Rules
  */
 const handle = (target, keysMap) => {
   if (!check(target, keysMap)) return;
@@ -17,94 +17,71 @@ const handle = (target, keysMap) => {
     target.forEach(item => {
       handle(item, keysMap[0]);
     });
-  // object[map]
+  // map
   else
     Object.keys(keysMap).forEach(toKey => {
       /**
-       * just copy value of fromKey to toKey
+       * Just copy value of `fromKey` to `toKey`.
        *
-       * toKey: fromKey
+       * @example
        *
-       * example:
-       *     keysMap: {
-       *         newKey: originKey
-       *     }
+       * ```
+       * {toKey: fromKey}
+       * ```
        */
       const fromKey = keysMap[toKey];
 
-      /**
-       * more handling of value of toKey
-       *
-       * toKey: {...}/[...]
-       *
-       * example:
-       *     keysMap: {
-       *         originKey: {
-       *             // more handling
-       *         },
-       *         originKey: [
-       *             {
-       *                 // more handling
-       *             }
-       *         ]
-       *     }
-       *
-       */
-      let originValue = target[toKey];
+      let oldValue = target[toKey];
 
+      // {data: 'list', _data: [{...}]}
       if (toKey.slice(0, marker.keepOnHandling.length) === marker.keepOnHandling) {
-        originValue = target[toKey.slice(marker.keepOnHandling.length)];
+        oldValue = target[toKey.slice(marker.keepOnHandling.length)];
       }
 
-      /**
-       * fromKey is object
-       *
-       * example:
-       *     target: {
-       *         list: [
-       *             {
-       *                 id: id,
-       *                 name: name
-       *             }
-       *         ]
-       *     }
-       *     keysMap: {
-       *         list: [
-       *             {
-       *                 newId: 'id',
-       *                 newName: 'name'
-       *             }
-       *         ]
-       *     }
-       */
       if (typeof fromKey === 'object') {
-        if (!check(originValue, fromKey)) return;
+        /**
+         * `fromKey` is object.
+         *
+         * @example
+         *
+         * ```
+         * {key: {...}}
+         * {key: [{...}]}
+         * ```
+         */
 
-        // is array
-        if (fromKey instanceof Array) {
-          originValue.forEach(item => {
+        if (!check(oldValue, fromKey)) return;
+
+        // array
+        if (Array.isArray(fromKey)) {
+          oldValue.forEach(item => {
             if (!check(item, fromKey[0])) return;
 
             handle(item, fromKey[0]);
           });
         }
-        // is object
+        // map
         else {
-          handle(originValue, fromKey);
+          handle(oldValue, fromKey);
         }
       } else if (typeof fromKey === 'string') {
         /**
-         * is string
+         * `fromKey` is string.
          *
-         * toKey: fromKey
+         * @example
+         *
+         * ```
+         * {toKey: fromKey}
+         * ```
          */
+
         convert(target, keysMap, toKey);
-      }
-      // other
-      else {
-        logger.error(`can't resolve key: \n${JSON.stringify(fromKey)}`);
+      } else {
+        // Others.
+
+        error(`can't resolve key: ${JSON.stringify(fromKey)}`);
       }
     });
 };
 
-module.exports = handle;
+export default handle;

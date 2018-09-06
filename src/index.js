@@ -8,7 +8,7 @@ import stringOperator from './operator/string';
 import sumOperator from './operator/sum';
 import averageOperator from './operator/average';
 
-// built in operations
+// built-in operators
 register(intOperator);
 register(floatOperator);
 register(boolOperator);

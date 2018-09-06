@@ -11,7 +11,7 @@ export default {
       return sum;
     }
 
-    if (!value || !(value instanceof Array)) {
+    if (!value || !Array.isArray(value)) {
       error(`original value should be an array for operator '${operator}'.`, value);
       return sum;
     }

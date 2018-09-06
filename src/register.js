@@ -1,7 +1,7 @@
 import operations from './operations';
 
 /**
- * register an operation
+ * Register an operator.
  *
  * @param test
  * @param handler
@@ -13,9 +13,9 @@ export default function(test, handler) {
   if (test && handler) operations.push({ test, handler });
   // map or array
   else if (typeof test === 'object') {
-    // array
-    if (test instanceof Array) operations.push(...test);
-    // map
+    // [{test, handler}, {...}]
+    if (Array.isArray(test)) operations.push(...test);
+    // {test, handler}
     else operations.push(test);
   }
 }
