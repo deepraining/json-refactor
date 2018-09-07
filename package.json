@@ -12,7 +12,7 @@
     "structure"
   ],
   "source": "src/index.js",
-  "module": "dist/json-refactor.es.js",
+  "module": "dist/json-refactor.m.js",
   "umd:main": "dist/json-refactor.umd.js",
   "main": "dist/json-refactor.js",
   "files": [
