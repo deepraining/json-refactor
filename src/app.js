@@ -22,7 +22,7 @@ export const marker = {
    * ```
    * target: {list: [{}]}
    *
-   * mapping: {data: 'list', _data: [{}]}
+   * rules: {data: 'list', _data: [{}]}
    * ```
    */
   keepOnHandling: '_',
@@ -32,7 +32,7 @@ export const marker = {
    * @example
    *
    * ```
-   * mapping: {toKey: 'fromKey|operator1|operator2|operator3'}
+   * rules: {toKey: 'fromKey|operator1|operator2|operator3'}
    * ```
    */
   operatorDelimiter: '|',
