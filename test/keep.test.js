@@ -1,4 +1,4 @@
-const refactor = require('../lib');
+const refactor = require('../lib/cjs');
 
 describe('Make a new key, and keep on formatting the new key.', () => {
   test('result should have "aaa.aaa.aaa" field.', () => {

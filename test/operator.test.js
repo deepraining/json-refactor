@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const refactor = require('../lib');
+const refactor = require('../lib/cjs');
 
 describe('Make an operator to original value.', () => {
   test('built-in operators.', () => {

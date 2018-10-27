@@ -1,4 +1,4 @@
-const refactor = require('../lib');
+const refactor = require('../lib/cjs');
 
 describe('dot semantic test', () => {
   test('result should have "aaa" field.', () => {

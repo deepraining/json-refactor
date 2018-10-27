@@ -1,10 +1,31 @@
+import babel from 'rollup-plugin-babel';
 import json from 'rollup-plugin-json';
 
-export default {
-  input: 'src/index.js',
-  output: {
-    file: 'lib/index.js',
+export default [
+  {
+    file: 'lib/cjs.js',
     format: 'cjs',
   },
-  plugins: [json()],
-};
+  {
+    file: 'lib/m.js',
+    format: 'esm',
+  },
+  {
+    file: 'lib/umd.js',
+    format: 'umd',
+    name: 'JSONRefactor',
+  },
+  {
+    file: 'lib/amd.js',
+    format: 'amd',
+  },
+].map(output => ({
+  input: 'src/index.js',
+  output,
+  plugins: [
+    babel({
+      presets: ['@babel/preset-env'],
+    }),
+    json(),
+  ],
+}));

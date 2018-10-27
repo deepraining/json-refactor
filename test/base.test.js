@@ -1,4 +1,4 @@
-const refactor = require('../lib');
+const refactor = require('../lib/cjs');
 
 describe('base test', () => {
   test('result should have "aaa" and "bbb" fields.', () => {
