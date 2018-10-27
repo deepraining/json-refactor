@@ -1,32 +1,29 @@
 {
-  "name": "sclean",
-  "version": "0.1.0",
+  "name": "json-refactor",
+  "version": "1.0.0",
   "main": "lib/index.js",
-  "bin": "bin/sclean.js",
-  "description": "A tool to clean obsolete hash-coded files, which created by building tools, like webpack, gulp.",
+  "module": "lib/m.js",
+  "umd:main": "lib/umd.js",
+  "amd:main": "lib/amd.js",
+  "description": "Refactor JSON object structure based on provided rules.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/senntyou/sclean"
+    "url": "https://github.com/senntyou/json-refactor"
   },
   "keywords": [
-    "web",
-    "frontend",
-    "build",
-    "tool",
-    "gulp",
-    "webpack",
-    "clean",
-    "obsolete",
-    "redundant"
+    "json",
+    "refactor",
+    "format",
+    "rule",
+    "structure"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/senntyou/sclean/issues"
+    "url": "https://github.com/senntyou/json-refactor/issues"
   },
-  "homepage": "https://github.com/senntyou/sclean",
+  "homepage": "https://github.com/senntyou/json-refactor",
   "readmeFilename": "README.md",
   "files": [
-    "bin",
     "lib"
   ],
   "scripts": {
@@ -42,16 +39,7 @@
     "test:base": "jest test/base.test.js"
   },
   "dependencies": {
-    "chalk": "^2.4.1",
-    "commander": "^2.19.0",
-    "decompress": "^4.2.0",
-    "del": "^3.0.0",
-    "glob": "^7.1.3",
-    "gulp": "^4.0.0",
-    "gulp-zip": "^4.2.0",
-    "inquirer": "^6.2.0",
-    "ora": "^3.0.0",
-    "recursive-readdir": "^2.2.2"
+    "clone": "^2.1.2"
   },
   "devDependencies": {
     "eslint": "^5.6.1",

@@ -1,10 +1,10 @@
-const JSONRefactor = require('../dist/json-refactor');
+const refactor = require('../lib');
 
 describe('base test', () => {
   test('result should have "aaa" and "bbb" fields.', () => {
     const target = { a: 1, b: 2 };
-    const mapping = { aaa: 'a', bbb: 'b' };
-    const result = JSONRefactor(target, mapping);
+    const rules = { aaa: 'a', bbb: 'b' };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result.a).toBe(1);
@@ -16,8 +16,8 @@ describe('base test', () => {
 
   test('result should have "aaa" and "bbb" fields, and not modify target.', () => {
     const target = { a: 1, b: 2 };
-    const mapping = { aaa: 'a', bbb: 'b' };
-    const result = JSONRefactor(target, mapping, !0);
+    const rules = { aaa: 'a', bbb: 'b' };
+    const result = refactor(target, rules, !0);
 
     expect(result).not.toBe(target);
     expect(target.a).toBe(1);
@@ -32,8 +32,8 @@ describe('base test', () => {
 
   test('result should have "aaa" and "bbb" fields, but value is "undefined".', () => {
     const target = { a: 1, b: 2 };
-    const mapping = { aaa: 'c', bbb: 'd' };
-    const result = JSONRefactor(target, mapping);
+    const rules = { aaa: 'c', bbb: 'd' };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result.a).toBe(1);

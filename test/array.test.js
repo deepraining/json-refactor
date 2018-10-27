@@ -1,10 +1,10 @@
-const JSONRefactor = require('../dist/json-refactor');
+const refactor = require('../lib');
 
 describe('array test', () => {
   test('each item of result should have "aaa" and "bbb" fields.', () => {
     const target = [{ a: 1, b: 2 }, { a: 3, c: 5, d: 6 }];
-    const mapping = [{ aaa: 'a', bbb: 'b' }];
-    const result = JSONRefactor(target, mapping);
+    const rules = [{ aaa: 'a', bbb: 'b' }];
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result[0].a).toBe(1);
@@ -20,8 +20,8 @@ describe('array test', () => {
 
   test('each item of result should have "aaa" and "bbb" fields.', () => {
     const target = {};
-    const mapping = { list: [{ aaa: 'a', bbb: 'b' }] };
-    const result = JSONRefactor(target, mapping);
+    const rules = { list: [{ aaa: 'a', bbb: 'b' }] };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(Object.keys(result).length).toBe(0);
@@ -43,7 +43,7 @@ describe('array test', () => {
       },
       { a: 3 },
     ];
-    const mapping = [
+    const rules = [
       {
         aaa: 'a',
         bbb: 'b',
@@ -61,7 +61,7 @@ describe('array test', () => {
         ],
       },
     ];
-    const result = JSONRefactor(target, mapping);
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(Object.keys(result[0]).length).toBe(5); // a, b, aaa, bbb, list
@@ -72,19 +72,19 @@ describe('array test', () => {
     expect(Object.keys(result[0].list[0].list2[1]).length).toBe(5); // e, f, eee, fff, g
   });
 
-  test('target is map, mapping is array', () => {
+  test('target is map, rules is array', () => {
     const target = { list: {} };
-    const mapping = { list: [{ aaa: 'a', bbb: 'b' }] };
-    const result = JSONRefactor(target, mapping);
+    const rules = { list: [{ aaa: 'a', bbb: 'b' }] };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(Object.keys(result.list).length).toBe(0);
   });
 
-  test('target is string, mapping is array', () => {
+  test('target is string, rules is array', () => {
     const target = { list: 'hello' };
-    const mapping = { list: [{ aaa: 'a', bbb: 'b' }] };
-    const result = JSONRefactor(target, mapping);
+    const rules = { list: [{ aaa: 'a', bbb: 'b' }] };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(typeof result.list).toBe('string');
