@@ -1,22 +1,10 @@
-# Changelog
+# changelog
 
-## 0.2.0 [2018-09-06]
+## 0.1.0 [2018-10-24]
 
-- Use `microbundle` to build project.
+- Remove config file, use cli argv instead.
+- Use rollup to build.
 
-## 0.1.4
+## 0.0.1 [2018-07-23]
 
-- Fix bug of `register(RegExp, Handler)`
-
-## 0.1.3
-
-- Remove `JSON.refactor`
-
-## 0.1.2
-
-- Set global export name `JSONRefactor`
-
-## 0.1.1
-
-- New version, with many updates.
-- Rewrite core scripts, and update docs.
+- Init
