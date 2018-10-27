@@ -6,11 +6,13 @@ Refactor JSON object structure based on provided rules.
 
 ```
 npm install json-refactor --save
+```
 
+## how to use
+
+```
 import refactor from 'json-refactor';
-```
 
-```
 const result = refactor(target, rules, clone);
 ```
 
