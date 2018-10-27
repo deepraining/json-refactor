@@ -1,10 +1,10 @@
-const JSONRefactor = require('../dist/json-refactor');
+const refactor = require('../lib/cjs');
 
 describe('dot semantic test', () => {
   test('result should have "aaa" field.', () => {
     const target = { a: { a: { a: 1 } } };
-    const mapping = { aaa: 'a.a.a' };
-    const result = JSONRefactor(target, mapping);
+    const rules = { aaa: 'a.a.a' };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result.a.a.a).toBe(1);
@@ -14,8 +14,8 @@ describe('dot semantic test', () => {
 
   test('first key not exist', () => {
     const target = {};
-    const mapping = { aaa: 'a.a.a' };
-    const result = JSONRefactor(target, mapping);
+    const rules = { aaa: 'a.a.a' };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result.aaa).toBeUndefined();
@@ -24,8 +24,8 @@ describe('dot semantic test', () => {
 
   test('middle key not exist', () => {
     const target = { a: { a: {} } };
-    const mapping = { aaa: 'a.a.a' };
-    const result = JSONRefactor(target, mapping);
+    const rules = { aaa: 'a.a.a' };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result.aaa).toBeUndefined();

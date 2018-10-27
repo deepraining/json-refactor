@@ -1,9 +1,16 @@
-const JSONRefactor = require('../dist/json-refactor');
+/* eslint-disable no-restricted-globals */
+const refactor = require('../lib/cjs');
 
 describe('Make an operator to original value.', () => {
   test('built-in operators.', () => {
-    const target = { a: 1, b: '234', c: '1.22', d: '0.01', e: [{ value: 1 }, { value: 2 }] };
-    const mapping = {
+    const target = {
+      a: 1,
+      b: '234',
+      c: '1.22',
+      d: '0.01',
+      e: [{ value: 1 }, { value: 2 }],
+    };
+    const rules = {
       aaa: 'a|bool',
       bbb: 'b|int',
       ccc: 'c|float',
@@ -11,7 +18,7 @@ describe('Make an operator to original value.', () => {
       sum: 'e|sum!value',
       average: 'e|average!value',
     };
-    const result = JSONRefactor(target, mapping);
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result.aaa).toBe(true);
@@ -25,8 +32,8 @@ describe('Make an operator to original value.', () => {
 
   test('with dot semantic', () => {
     const target = { a: { a: { a: 1 } } };
-    const mapping = { aaa: 'a.a.a|bool' };
-    const result = JSONRefactor(target, mapping);
+    const rules = { aaa: 'a.a.a|bool' };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result.a.a.a).toBe(1);
@@ -35,9 +42,15 @@ describe('Make an operator to original value.', () => {
   });
 
   test('register custom operators', () => {
-    JSONRefactor.register('double', value => (typeof value !== 'number' ? value : value * 2));
-    JSONRefactor.register({ test: 'triple', handler: value => (typeof value !== 'number' ? value : value * 3) });
-    JSONRefactor.register([
+    refactor.register(
+      'double',
+      value => (typeof value !== 'number' ? value : value * 2)
+    );
+    refactor.register({
+      test: 'triple',
+      handler: value => (typeof value !== 'number' ? value : value * 3),
+    });
+    refactor.register([
       {
         test: /^slice!/,
         handler: (value, operator) => {
@@ -58,8 +71,13 @@ describe('Make an operator to original value.', () => {
     ]);
 
     const target = { a: 1, b: 2, c: 'abcdefg' };
-    const mapping = { aaa: 'a|double', bbb: 'b|triple', abcd: 'c|slice!0!4', efg: 'c|slice!-3' };
-    const result = JSONRefactor(target, mapping);
+    const rules = {
+      aaa: 'a|double',
+      bbb: 'b|triple',
+      abcd: 'c|slice!0!4',
+      efg: 'c|slice!-3',
+    };
+    const result = refactor(target, rules);
 
     expect(result).toBe(target);
     expect(result.aaa).toBe(2);
@@ -70,13 +88,18 @@ describe('Make an operator to original value.', () => {
   });
 
   test('custom operatorDelimiter by "||".', () => {
-    JSONRefactor.set({ operatorDelimiter: '||' });
+    refactor.set({ operatorDelimiter: '||' });
 
     const target = { a: 1, b: '234', c: '1.22', d: '0.01' };
-    const mapping = { aaa: 'a||bool', bbb: 'b||int', ccc: 'c||float', ddd: 'd||int||bool' };
-    const result = JSONRefactor(target, mapping);
+    const rules = {
+      aaa: 'a||bool',
+      bbb: 'b||int',
+      ccc: 'c||float',
+      ddd: 'd||int||bool',
+    };
+    const result = refactor(target, rules);
 
-    JSONRefactor.set({ operatorDelimiter: '|' });
+    refactor.set({ operatorDelimiter: '|' });
 
     expect(result.aaa).toBe(true);
     expect(result.bbb).toBe(234);
