@@ -68,9 +68,7 @@ Use `|` to concat `from key` and `operator`, and you can add multiple operators.
 
 ## api
 
-### refactor.set
-
-Set the default config values.
+### `refactor.set`: set the default config values
 
 ```
 refactor.set({
@@ -88,9 +86,7 @@ refactor.set({
   - `type`: `string`
   - `default`: `|`
 
-### refactor.register
-
-Register operators.
+### `refactor.register`: register operators
 
 ```
 // register one operator
