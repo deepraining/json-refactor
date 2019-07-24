@@ -34,7 +34,7 @@ const result = refactor(target, rules, clone);
 
 `result`: `{aaa: 1, bbb: 2}`
 
-### 2. rules 应该是原对象保持一样的数据结构, 包括数组
+### 2. rules 应该与原对象保持一样的数据结构, 包括数组
 
 `target`: `[{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]`
 
