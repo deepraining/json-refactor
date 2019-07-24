@@ -1,16 +1,16 @@
 # json-refactor
 
-[English Documentation](./README.en.md)
+[中文文档](./README.md)
 
-基于指定的规则对 Json 数据结构进行重构.
+Refactor JSON object structure based on provided rules.
 
-## 快速开始
+## quick start
 
 ```
 npm install json-refactor --save
 ```
 
-## 怎样使用
+## how to use
 
 ```
 import refactor from 'json-refactor';
@@ -18,15 +18,15 @@ import refactor from 'json-refactor';
 const result = refactor(target, rules, clone);
 ```
 
-- `target`: 待重构的对象
-- `rules`: 重构规则
-- `clone`: 默认 `false`, 是否复制原对象. 默认会对原对象进行重构，并返回. 如果为 `true`, 则会复制原对象并重构后返回，原对象不会被修改.
+- `target`: target to be refactored
+- `rules`: rules to refactor
+- `clone`: default `false`, whether to clone a copy of target. By default, the original target will be modified and return. If `true`, a new cloned target will be formatted and return, and the original target will not be modified.
 
-## 规则
+## rules
 
-`to key` 到 `from key` 映射.
+The `to key` to `from key` hash map.
 
-### 1. 基本
+### 1. base
 
 `target`: `{a: 1, b: 2}`
 
@@ -34,7 +34,7 @@ const result = refactor(target, rules, clone);
 
 `result`: `{aaa: 1, bbb: 2}`
 
-### 2. rules 应该与原对象保持一样的数据结构, 包括数组
+### 2. rules should have the same structure with target, including array
 
 `target`: `[{a: 1, b: 2}, {a: 3, b: 4}, {a: 5, b: 6}]`
 
@@ -42,7 +42,7 @@ const result = refactor(target, rules, clone);
 
 `result`: `[{aaa: 1, bbb: 2}, {aaa: 3, bbb: 4}, {aaa: 5, bbb: 6}]`
 
-### 3. 支持 `.` 语法
+### 3. support `.` semantic
 
 `target`: `{a: {a: {a: 1}}}`
 
@@ -50,7 +50,7 @@ const result = refactor(target, rules, clone);
 
 `result`: `{aaa: 1}`
 
-### 4. 创建一个新的键名，并继续对这个键名的值进行重构
+### 4. make a new key, and keep on formatting the new key
 
 `target`: `{a: {a: {a: 1}}}`
 
@@ -58,9 +58,9 @@ const result = refactor(target, rules, clone);
 
 `result`: `{aaa: {aaa: {aaa: 1}}}`
 
-### 5. 对原值添加一个操作符
+### 5. take an operator to original value
 
-用 `|` 连接 `from key` 与 `operator`, 并且可以添加多个操作符.
+Use `|` to concat `from key` and `operator`, and you can add multiple operators.
 
 `target`: `{a: 1, b: '234', c: '1.22', d: '0.01'}`
 
@@ -70,7 +70,7 @@ const result = refactor(target, rules, clone);
 
 ## api
 
-### `refactor.set`: 设置默认的配置值
+### `refactor.set`: set the default config values
 
 ```
 refactor.set({
@@ -79,59 +79,59 @@ refactor.set({
 });
 ```
 
-- `keepOnHandling`: 创建一个新的键名，并继续对这个键名的值进行重构
+- `keepOnHandling`: make a new key, and keep on formatting the new key
 
   - `type`: `string`
   - `default`: `_`
 
-- `operatorDelimiter`: 多个操作符的分隔符
+- `operatorDelimiter`: delimiter of operators
   - `type`: `string`
   - `default`: `|`
 
-### `refactor.register`: 注册操作符
+### `refactor.register`: register operators
 
 ```
-// 注册一个操作符
+// register one operator
 refactor.register(test, handler);
 refactor.register({test, handler});
 
-// 注册多个操作符
+// register multiple operators
 refactor.register([{test1, handler1}, {test2, handler2}, ...]);
 ```
 
-- `test`: 匹配操作符
+- `test`: to match the operator
 
   - `type`: `string/RegExp`
   - `example`: `int`, `float`, `bool`, `string`, `/^slice!0!10/`
 
-- `handler`: 操作原值，并返回一个新值
+- `handler`: handle the original value and return a new value
   - `type`: `function`
   - `example`: `(value, operator) => newValue`
   - `parameters`: `value, operator`
-    - `value`: 原值
-    - `operator`: 匹配到的操作符
+    - `value`: original value to be handled
+    - `operator`: operator matched
 
-## 内置操作符
+## built-in operators
 
 ### 1. `int`
 
-获取整数值
+Get an integer value.
 
 ### 2. `float`
 
-获取小数值
+Get a float value.
 
 ### 3. `bool`
 
-获取 bool 值
+Get a bool value.
 
 ### 4. `string`
 
-获取字符串值
+Get a string value.
 
 ### 5. `sum`
 
-获取指定数组中每个对象的某个键对应的值的和
+Get a sum value specified by a key of each element, within an array.
 
 `format`: `sum!key`
 
@@ -143,7 +143,7 @@ refactor.register([{test1, handler1}, {test2, handler2}, ...]);
 
 ### 6. `average`
 
-获取指定数组中每个对象的某个键对应的值的平均数
+Get an average value specified by a key of each element, within an array.
 
 `format`: `average!key`
 
